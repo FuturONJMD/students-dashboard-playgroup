@@ -25,6 +25,21 @@ function parseBottle(val) {
 function formatArrivalTime(val) {
     if (!val || val === '' || val === 'N/A') return 'N/A';
     const s = String(val).trim();
+    // Handle ISO timestamp (e.g., "1899-12-30T03:35:50.000Z" - time-only from Sheets)
+    if (s.includes('T') && s.includes('Z')) {
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+            // Add 5:30 for IST
+            const ist = new Date(d.getTime() + 5.5 * 60 * 60 * 1000);
+            let h = ist.getUTCHours();
+            const m = String(ist.getUTCMinutes()).padStart(2, '0');
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            if (h > 12) h -= 12;
+            if (h === 0) h = 12;
+            return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+        }
+    }
+    // Handle HH:MM format
     const match = s.match(/^(\d{1,2}):(\d{2})$/);
     if (!match) return s;
     let h = parseInt(match[1]);
@@ -33,6 +48,35 @@ function formatArrivalTime(val) {
     if (h > 12) h -= 12;
     if (h === 0) h = 12;
     return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+}
+
+function formatDate(val) {
+    if (!val || val === '' || val === 'N/A') return '';
+    const s = String(val).trim();
+    // Already in DD/MM/YYYY format
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) return s;
+    // Handle ISO timestamp (e.g., "2026-07-26T18:30:00.000Z")
+    if (s.includes('T') && s.includes('Z')) {
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+            // Add 5:30 for IST
+            const ist = new Date(d.getTime() + 5.5 * 60 * 60 * 1000);
+            const day = String(ist.getUTCDate()).padStart(2, '0');
+            const mon = String(ist.getUTCMonth() + 1).padStart(2, '0');
+            const year = ist.getUTCFullYear();
+            return `${day}/${mon}/${year}`;
+        }
+    }
+    // Handle YYYY-MM-DD format
+    const isoMatch = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) return `${isoMatch[3]}/${isoMatch[2]}/${isoMatch[1]}`;
+    return s;
+}
+
+function isISODate(val) {
+    if (!val) return false;
+    const s = String(val).trim();
+    return s.includes('T') && s.includes('Z') && !isNaN(new Date(s).getTime());
 }
 
 // === Apps Script fetch (NO caching, instant updates) ===
@@ -67,8 +111,8 @@ function parseSheetRows(rows) {
         const row = rows[r] || [];
         const cell0 = (row[0] || '').toUpperCase().trim();
         const cell1 = (row[1] || '').toUpperCase().trim();
-        // If first cell looks like a date (DD/MM/YYYY) and second cell is a valid day name
-        if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(cell0) && validDays.includes(cell1)) {
+        // If first cell looks like a date (DD/MM/YYYY or ISO) and second cell is a valid day name
+        if ((/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(cell0) || isISODate(row[0])) && validDays.includes(cell1)) {
             colOffset = 1;
             break;
         }
@@ -124,7 +168,7 @@ function parseSheetRows(rows) {
                 const o = colOffset; // offset for remaining columns
                 days.push({
                     day: dayName,
-                    date: colOffset === 1 ? (r[0] || '') : '', // store raw date if available
+                    date: colOffset === 1 ? formatDate(r[0]) : '',
                     arrival_time: formatArrivalTime(r[o + 1]),
                     snacks: r[o + 2] || 'N/A',
                     snack_completion: parsePercentage(r[o + 3]),
@@ -259,13 +303,13 @@ async function loadData() {
     badge.style.cssText = 'position:fixed;bottom:12px;left:12px;padding:6px 14px;border-radius:8px;font-size:0.7rem;font-weight:600;z-index:9999;color:#fff;';
     if (source === 'apps-script') {
         badge.style.background = '#059669';
-        badge.textContent = '✓ LIVE (instant)';
+        badge.textContent = '? LIVE (instant)';
     } else if (source === 'jsonp') {
         badge.style.background = '#d97706';
-        badge.textContent = '⚠ CACHED (~5min delay)';
+        badge.textContent = '? CACHED (~5min delay)';
     } else {
         badge.style.background = '#dc2626';
-        badge.textContent = '✗ OFFLINE (fallback data)';
+        badge.textContent = '? OFFLINE (fallback data)';
     }
     document.body.appendChild(badge);
     setTimeout(() => badge.remove(), 6000);
