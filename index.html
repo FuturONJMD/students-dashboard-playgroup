@@ -746,7 +746,7 @@
                     return;
                 }
                 const sp = pct(d.snack_completion), lp = pct(d.lunch_completion), wp = pct(d.water_completion);
-                const uniformBadge = d.uniform === 'YES' ? '<span class="badge badge-green">Uniform</span>' : d.uniform === 'NO' ? '<span class="badge badge-yellow">No</span>' : d.uniform.toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
+                const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? '<span class="badge badge-green">Uniform</span>' : String(d.uniform || '').toUpperCase() === 'NO' ? '<span class="badge badge-yellow">No</span>' : String(d.uniform || '').toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
                 html += `
                     <div style="display:grid; grid-template-columns:1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#94a3b8; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
