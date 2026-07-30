@@ -98,6 +98,61 @@ async function fetchViaAppsScript() {
     return result;
 }
 
+// Detect column indices from header row
+function detectColumns(headerRow, colOffset) {
+    const headers = headerRow.map(h => String(h || '').toUpperCase().trim());
+    // Find column index where header contains ANY of the keywords
+    function findCol(keywords) {
+        for (let i = 0; i < headers.length; i++) {
+            for (const kw of keywords) {
+                if (headers[i].includes(kw)) return i;
+            }
+        }
+        return -1;
+    }
+    const arrival = findCol(['ARRIVAL']);
+    const snacks = findCol(['SNACK']);
+    // Snack% must contain both COMPLETION and SNACK (or just SNACK%)
+    let snack_pct = -1;
+    for (let i = 0; i < headers.length; i++) {
+        if ((headers[i].includes('COMPLETION') && headers[i].includes('SNACK')) || headers[i].includes('SNACK%')) {
+            snack_pct = i; break;
+        }
+    }
+    const interested = findCol(['INTERESTED']);
+    // Lunch% must contain LUNCH and (COMPLETION or %)
+    let lunch_pct = -1;
+    for (let i = 0; i < headers.length; i++) {
+        if (headers[i].includes('LUNCH') && (headers[i].includes('COMPLETION') || headers[i].includes('%'))) {
+            lunch_pct = i; break;
+        }
+    }
+    // Lunch food column: contains "LUNCH" but NOT "COMPLETION" and NOT "%"
+    let lunch = -1;
+    for (let i = 0; i < headers.length; i++) {
+        if (headers[i].includes('LUNCH') && !headers[i].includes('COMPLETION') && !headers[i].includes('%')) {
+            lunch = i; break;
+        }
+    }
+    // Water% must contain WATER
+    const water_pct = findCol(['WATER']);
+    const bottle = findCol(['BOTTLE', 'REFILL']);
+    const uniform = findCol(['UNIFORM']);
+    // Fallback to fixed offsets if detection fails
+    const o = colOffset;
+    return {
+        arrival: arrival >= 0 ? arrival : o + 1,
+        snacks: snacks >= 0 ? snacks : o + 2,
+        snack_pct: snack_pct >= 0 ? snack_pct : o + 3,
+        interested: interested >= 0 ? interested : o + 4,
+        lunch_pct: lunch_pct,
+        lunch: lunch,
+        water_pct: water_pct >= 0 ? water_pct : o + 7,
+        bottle: bottle >= 0 ? bottle : o + 8,
+        uniform: uniform >= 0 ? uniform : o + 9
+    };
+}
+
 // Parse rows from Apps Script (array of arrays with display values)
 // Auto-detects whether sheet has a Date column (offset=1) or not (offset=0)
 function parseSheetRows(rows) {
@@ -158,6 +213,8 @@ function parseSheetRows(rows) {
                     break;
                 }
             }
+            // Detect column mapping from header row
+            const colMap = detectColumns(headerRow, colOffset);
             i++;
             const days = [];
             for (let d = 0; d < 6 && i < rows.length; d++, i++) {
@@ -165,19 +222,18 @@ function parseSheetRows(rows) {
                 // Day name is at colOffset position
                 const dayName = (r[colOffset] || '').toUpperCase().trim();
                 if (!validDays.includes(dayName)) break;
-                const o = colOffset; // offset for remaining columns
                 days.push({
                     day: dayName,
                     date: colOffset === 1 ? formatDate(r[0]) : '',
-                    arrival_time: formatArrivalTime(r[o + 1]),
-                    snacks: r[o + 2] || 'N/A',
-                    snack_completion: parsePercentage(r[o + 3]),
-                    interested_in: r[o + 4] || 'N/A',
-                    lunch_completion: parsePercentage(r[o + 5]),
-                    lunch: r[o + 6] || 'N/A',
-                    water_completion: parsePercentage(r[o + 7]),
-                    bottle_refill: parseBottle(r[o + 8]),
-                    uniform: r[o + 9] || 'N/A'
+                    arrival_time: formatArrivalTime(r[colMap.arrival]),
+                    snacks: r[colMap.snacks] || 'N/A',
+                    snack_completion: parsePercentage(r[colMap.snack_pct]),
+                    interested_in: r[colMap.interested] || 'N/A',
+                    lunch_completion: colMap.lunch_pct >= 0 ? parsePercentage(r[colMap.lunch_pct]) : 0,
+                    lunch: colMap.lunch >= 0 ? (r[colMap.lunch] || 'N/A') : 'N/A',
+                    water_completion: parsePercentage(r[colMap.water_pct]),
+                    bottle_refill: parseBottle(r[colMap.bottle]),
+                    uniform: r[colMap.uniform] || 'N/A'
                 });
             }
             if (days.length > 0) {
