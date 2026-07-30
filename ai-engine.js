@@ -49,8 +49,8 @@ const AIEngine = {
 
         weeks.forEach(w => {
             this.getActive(w).forEach(d => {
-                const snack = (d.snacks || '').toUpperCase().trim();
-                const lunch = (d.lunch || '').toUpperCase().trim();
+                const snack = String(d.snacks || '').toUpperCase().trim();
+                const lunch = String(d.lunch || '').toUpperCase().trim();
                 if (snack && snack !== 'N/A') {
                     snackCounts[snack] = (snackCounts[snack] || 0) + 1;
                     if (this.pct(d.snack_completion) >= 90) highCompletionSnacks[snack] = (highCompletionSnacks[snack] || 0) + 1;
