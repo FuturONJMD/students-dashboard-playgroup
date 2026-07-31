@@ -11,18 +11,18 @@ const AIEngine = {
     studentHasLunch(studentName) { return LUNCH_STUDENTS.includes(studentName); },
     // Check if a day has any data entered (vs placeholder/future day)
     hasData(d) {
-        if (d.arrival_time && d.arrival_time !== 'N/A') return true;
-        if (d.snacks && d.snacks !== 'N/A') return true;
-        if (d.lunch && d.lunch !== 'N/A') return true;
+        if (d.arrival_time && d.arrival_time !== 'N/A' && d.arrival_time !== '-') return true;
+        if (d.snacks && d.snacks !== 'N/A' && d.snacks !== '-') return true;
+        if (d.lunch && d.lunch !== 'N/A' && d.lunch !== '-') return true;
         if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return true;
         return false;
     },
 
     // Check if child is present (has arrival_time OR has food/water data)
     isPresent(d) {
-        if (d.arrival_time && d.arrival_time !== 'N/A') return true;
-        if (d.snacks && d.snacks !== 'N/A') return true;
-        if (d.lunch && d.lunch !== 'N/A') return true;
+        if (d.arrival_time && d.arrival_time !== 'N/A' && d.arrival_time !== '-') return true;
+        if (d.snacks && d.snacks !== 'N/A' && d.snacks !== '-') return true;
+        if (d.lunch && d.lunch !== 'N/A' && d.lunch !== '-') return true;
         if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return true;
         return false;
     },
