@@ -445,7 +445,7 @@
                 if (match) {
                     const d = new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
                     if (!isNaN(d.getTime())) {
-                        // JS: 0=Sun,1=Mon,...6=Sat → convert to school order: Mon=0,Tue=1,...Sat=5
+                        // JS: 0=Sun,1=Mon,...6=Sat â†’ convert to school order: Mon=0,Tue=1,...Sat=5
                         const jsDay = d.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
                         startDayOfWeek = jsDay === 0 ? 6 : jsDay - 1; // Mon=0, Tue=1, ..., Sat=5
                     }
@@ -471,21 +471,22 @@
         }
 
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
+        function isValidVal(v) { return v && v !== 'N/A' && v !== '-'; }
         function hasData(d) {
-            if (d.arrival_time && d.arrival_time !== 'N/A') return true;
-            if (d.snacks && d.snacks !== 'N/A') return true;
-            if (d.lunch && d.lunch !== 'N/A') return true;
+            if (isValidVal(d.arrival_time)) return true;
+            if (isValidVal(d.snacks)) return true;
+            if (isValidVal(d.lunch)) return true;
             if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return true;
             return false;
         }
         function isAbsent(d) {
-            // If no data entered at all, this is a placeholder (not absent)
+            // If no data entered at all, this is a future/excluded day
             if (!hasData(d)) return true;
             // If child has arrival time recorded, they are PRESENT
-            if (d.arrival_time && d.arrival_time !== 'N/A') return false;
+            if (isValidVal(d.arrival_time)) return false;
             // If food/water data exists, they are PRESENT
-            if (d.snacks && d.snacks !== 'N/A') return false;
-            if (d.lunch && d.lunch !== 'N/A') return false;
+            if (isValidVal(d.snacks)) return false;
+            if (isValidVal(d.lunch)) return false;
             if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return false;
             return true;
         }
@@ -606,7 +607,7 @@
 
         function renderOverview(days, week) {
             const active = getActiveDays(days);
-            // Saturday is half-day (snacks only, no lunch) — exclude Saturday from lunch average
+            // Saturday is half-day (snacks only, no lunch) â€” exclude Saturday from lunch average
             const lunchDays = active.filter(d => d.day !== 'SATURDAY');
             const snackAvg = active.length ? active.reduce((s, d) => s + pct(d.snack_completion), 0) / active.length : 0;
             const lunchAvg = lunchDays.length ? lunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / lunchDays.length : 0;
@@ -668,7 +669,7 @@
             html += `
                 <div class="section-header">DAILY NUTRITION INSIGHT</div>
                 <div class="ai-card" style="margin-bottom:2rem;">
-                    <div class="ai-card-header"><span style="font-size:1.1rem;">🥗</span> Nutrition Score (Based on Food & Water Intake)</div>
+                    <div class="ai-card-header"><span style="font-size:1.1rem;">ðŸ¥—</span> Nutrition Score (Based on Food & Water Intake)</div>
                     <div style="display:flex; align-items:center; gap:20px; margin-bottom:16px;">
                         <div style="text-align:center;">
                             <div style="font-size:2.4rem; font-weight:700; color:${nutritionColor};">${avgNutrition}%</div>
@@ -761,14 +762,14 @@
             // AI Insights - Weekly Summary
             const summary = AIEngine.generateWeeklySummary(selectedStudent, selectedWeekIdx);
             html += `<div class="ai-card" style="margin-top:2rem;">
-                <div class="ai-card-header"><span style="font-size:1.1rem;">📝</span> Weekly Summary</div>
+                <div class="ai-card-header"><span style="font-size:1.1rem;">ðŸ“</span> Weekly Summary</div>
                 <div class="ai-summary-text">${summary}</div>
             </div>`;
 
             // AI Insights - Personalized Tips
             const tips = AIEngine.generateTips(selectedStudent, selectedWeekIdx);
             html += `<div class="ai-card">
-                <div class="ai-card-header"><span style="font-size:1.1rem;">💡</span> Personalized Tips</div>`;
+                <div class="ai-card-header"><span style="font-size:1.1rem;">ðŸ’¡</span> Personalized Tips</div>`;
             tips.forEach(t => {
                 html += `<div class="ai-tip ai-severity-${t.severity}"><span class="ai-tip-icon">${t.icon}</span><span class="ai-tip-text">${t.text}</span></div>`;
             });
@@ -777,9 +778,9 @@
             // AI Insights - Anomaly Detection
             const anomalies = AIEngine.detectAnomalies(selectedStudent, selectedWeekIdx);
             html += `<div class="ai-card">
-                <div class="ai-card-header"><span style="font-size:1.1rem;">🔍</span> Anomaly Detection</div>`;
+                <div class="ai-card-header"><span style="font-size:1.1rem;">ðŸ”</span> Anomaly Detection</div>`;
             if (anomalies.length === 0) {
-                html += `<div class="ai-tip ai-severity-positive"><span class="ai-tip-icon">✅</span><span class="ai-tip-text">No anomalies detected. Everything looks normal this week.</span></div>`;
+                html += `<div class="ai-tip ai-severity-positive"><span class="ai-tip-icon">âœ…</span><span class="ai-tip-text">No anomalies detected. Everything looks normal this week.</span></div>`;
             } else {
                 anomalies.forEach(a => {
                     html += `<div class="ai-tip ai-severity-${a.severity}"><span class="ai-tip-icon">${a.icon}</span><span class="ai-tip-text">${a.text}</span></div>`;
@@ -791,7 +792,7 @@
             if (!isParentView) {
             const recs = AIEngine.generateRecommendations(selectedWeekIdx);
             html += `<div class="ai-card">
-                <div class="ai-card-header"><span style="font-size:1.1rem;">📋</span> Teacher Recommendations <span class="ai-badge ai-badge-important" style="margin-left:8px;">${recs.length} items</span></div>`;
+                <div class="ai-card-header"><span style="font-size:1.1rem;">ðŸ“‹</span> Teacher Recommendations <span class="ai-badge ai-badge-important" style="margin-left:8px;">${recs.length} items</span></div>`;
             recs.forEach(r => {
                 html += `<div class="ai-rec ai-rec-${r.priority}">
                     <span style="font-size:1rem;">${r.icon}</span>
