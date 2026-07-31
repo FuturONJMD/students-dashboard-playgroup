@@ -3,9 +3,12 @@
 // Pattern Recognition, Trend Analysis, Contextual Insights
 // ============================================
 
+const LUNCH_STUDENTS = ['PRASASTHA','BHAVYESH','SHAANVIKA','CHAKRI'];
+
 const AIEngine = {
 
     // === HELPERS ===
+    studentHasLunch(studentName) { return LUNCH_STUDENTS.includes(studentName); },
     // Check if a day has any data entered (vs placeholder/future day)
     hasData(d) {
         if (d.arrival_time && d.arrival_time !== 'N/A') return true;
@@ -49,8 +52,8 @@ const AIEngine = {
 
         weeks.forEach(w => {
             this.getActive(w).forEach(d => {
-                const snack = String(d.snacks || '').toUpperCase().trim();
-                const lunch = String(d.lunch || '').toUpperCase().trim();
+                const snack = (d.snacks || '').toUpperCase().trim();
+                const lunch = (d.lunch || '').toUpperCase().trim();
                 if (snack && snack !== 'N/A') {
                     snackCounts[snack] = (snackCounts[snack] || 0) + 1;
                     if (this.pct(d.snack_completion) >= 90) highCompletionSnacks[snack] = (highCompletionSnacks[snack] || 0) + 1;
@@ -93,12 +96,16 @@ const AIEngine = {
 
         // Meal consistency (max 25 points) - low variance = high consistency
         const snackValues = active.map(d => this.pct(d.snack_completion));
-        // Exclude Saturday from lunch variance (half-day, no lunch)
-        const lunchDays = active.filter(d => d.day !== 'SATURDAY');
-        const lunchValues = lunchDays.map(d => this.pct(d.lunch_completion));
         const snackVariance = this.variance(snackValues);
-        const lunchVariance = this.variance(lunchValues);
-        const mealConsistency = Math.max(0, 25 - Math.round((snackVariance + lunchVariance) / 80));
+        let mealConsistency;
+        if (this.studentHasLunch(studentName)) {
+            const lunchDays = active.filter(d => d.day !== 'SATURDAY');
+            const lunchValues = lunchDays.map(d => this.pct(d.lunch_completion));
+            const lunchVariance = this.variance(lunchValues);
+            mealConsistency = Math.max(0, 25 - Math.round((snackVariance + lunchVariance) / 80));
+        } else {
+            mealConsistency = Math.max(0, 25 - Math.round(snackVariance / 40));
+        }
         score += mealConsistency;
         factors.push({ label: 'Meal Regularity', value: mealConsistency, max: 25 });
 
@@ -144,7 +151,7 @@ const AIEngine = {
         const weeks = studentsData[studentName];
         if (weeks.length < 2) return null;
 
-        const metrics = ['snack_completion', 'lunch_completion', 'water_completion'];
+        const metrics = this.studentHasLunch(studentName) ? ['snack_completion', 'lunch_completion', 'water_completion'] : ['snack_completion', 'water_completion'];
         const forecast = {};
 
         metrics.forEach(metric => {
@@ -255,11 +262,13 @@ const AIEngine = {
         else if (snackAvg >= 50) tips.push({ icon: '🍎', text: `${name} only finishes ${snackAvg}% of snacks. Consider smaller portions or different items.`, severity: 'warning' });
         else tips.push({ icon: '🍎', text: `${name} is eating very less snacks (${snackAvg}%). Please try favourite foods or check if portion is too large.`, severity: 'critical' });
 
-        // Lunch tips
-        if (lunchAvg >= 90) tips.push({ icon: '⭐', text: `${name} is finishing lunch very well (${lunchAvg}%). Great appetite at school!`, severity: 'positive' });
-        else if (lunchAvg >= 70) tips.push({ icon: '🍽️', text: `${name} eats ${lunchAvg}% of lunch. Good, but can improve with preferred menu items.`, severity: 'info' });
-        else if (lunchAvg >= 50) tips.push({ icon: '🍽️', text: `${name} only finishes ${lunchAvg}% of lunch. Try sending lighter or favourite meals.`, severity: 'warning' });
-        else tips.push({ icon: '🍽️', text: `${name} is eating very less lunch (${lunchAvg}%). You might want to try different meal options or smaller portions.`, severity: 'critical' });
+        // Lunch tips (only for lunch students)
+        if (this.studentHasLunch(studentName)) {
+            if (lunchAvg >= 90) tips.push({ icon: '⭐', text: `${name} is finishing lunch very well (${lunchAvg}%). Great appetite at school!`, severity: 'positive' });
+            else if (lunchAvg >= 70) tips.push({ icon: '🍽️', text: `${name} eats ${lunchAvg}% of lunch. Good, but can improve with preferred menu items.`, severity: 'info' });
+            else if (lunchAvg >= 50) tips.push({ icon: '🍽️', text: `${name} only finishes ${lunchAvg}% of lunch. Try sending lighter or favourite meals.`, severity: 'warning' });
+            else tips.push({ icon: '🍽️', text: `${name} is eating very less lunch (${lunchAvg}%). You might want to try different meal options or smaller portions.`, severity: 'critical' });
+        }
 
         // Water tips with monthly context
         if (waterAvg >= 90) tips.push({ icon: '💧', text: `${name} drinks water very well (${waterAvg}%). This week: ${Math.round(weekBottles)} bottles. Monthly total: ${Math.round(monthlyBottles)} bottles across ${monthlyDaysPresent} days. As per WHO guidelines, children aged ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange} need ~${WHO_WATER_STANDARDS[CURRENT_CLASS].dailyLitres}L daily — great job staying hydrated!`, severity: 'positive' });
@@ -314,10 +323,11 @@ const AIEngine = {
             return `${name} was not present during ${currentWeek.label}. No activity data is available for this week. Each school day includes classes, 3L skills, activities, dramatics, fun & games, and many more engaging experiences. Once ${name} returns, daily updates will resume here.`;
         }
 
+        const hasLunch = this.studentHasLunch(studentName);
         const snackAvg = Math.round(this.avg(active, 'snack_completion'));
-        const lunchAvg = Math.round(this.avg(active, 'lunch_completion'));
+        const lunchAvg = hasLunch ? Math.round(this.avg(active, 'lunch_completion')) : 0;
         const waterAvg = Math.round(this.avg(active, 'water_completion'));
-        const overall = Math.round((snackAvg + lunchAvg + waterAvg) / 3);
+        const overall = hasLunch ? Math.round((snackAvg + lunchAvg + waterAvg) / 3) : Math.round((snackAvg + waterAvg) / 2);
         const attendance = active.length;
         const bottleRefills = active.reduce((s, d) => s + d.bottle_refill, 0);
         const weekBottles = bottleRefills + attendance;
@@ -352,14 +362,14 @@ const AIEngine = {
         // Strengths
         const strengths = [];
         if (snackAvg >= 90) strengths.push('snack eating');
-        if (lunchAvg >= 90) strengths.push('lunch eating');
+        if (hasLunch && lunchAvg >= 90) strengths.push('lunch eating');
         if (waterAvg >= 90) strengths.push('water drinking');
         if (strengths.length) summary += `Doing great in: ${strengths.join(', ')}. `;
 
         // Areas needing work
         const improvements = [];
         if (snackAvg < 60) improvements.push(`snacks (${snackAvg}%)`);
-        if (lunchAvg < 60) improvements.push(`lunch (${lunchAvg}%)`);
+        if (hasLunch && lunchAvg < 60) improvements.push(`lunch (${lunchAvg}%)`);
         if (waterAvg < 60) improvements.push(`water (${waterAvg}%)`);
         if (improvements.length) summary += `Needs improvement in: ${improvements.join(', ')}. `;
 
@@ -369,7 +379,10 @@ const AIEngine = {
         if (weekIdx > 0) {
             const prevActive = this.getActive(weeks[weekIdx - 1]);
             if (prevActive.length) {
-                const prevOverall = Math.round((this.avg(prevActive, 'snack_completion') + this.avg(prevActive, 'lunch_completion') + this.avg(prevActive, 'water_completion')) / 3);
+                const prevSnack = this.avg(prevActive, 'snack_completion');
+                const prevLunch = hasLunch ? this.avg(prevActive, 'lunch_completion') : 0;
+                const prevWater = this.avg(prevActive, 'water_completion');
+                const prevOverall = hasLunch ? Math.round((prevSnack + prevLunch + prevWater) / 3) : Math.round((prevSnack + prevWater) / 2);
                 if (overall > prevOverall + 5) summary += `This is an improvement of ${overall - prevOverall}% from the previous week!`;
                 else if (prevOverall > overall + 5) summary += `This is a ${prevOverall - overall}% decline from the previous week. The areas flagged below can help focus improvement.`;
                 else summary += `Performance is consistent with the previous week.`;
@@ -406,7 +419,7 @@ const AIEngine = {
         // Sudden daily drops (present but 0%)
         active.forEach(d => {
             if (this.pct(d.snack_completion) === 0 && d.snacks !== 'N/A') anomalies.push({ severity: 'warning', icon: '🟡', text: `${d.day}: ${name} didn't eat any snack even though it was provided. They may not have been in the mood for it.`, type: 'metric' });
-            if (this.pct(d.lunch_completion) === 0 && d.lunch !== 'N/A') anomalies.push({ severity: 'warning', icon: '🟡', text: `${d.day}: ${name} didn't eat lunch. Their preferences may be changing — trying different options could help.`, type: 'metric' });
+            if (this.studentHasLunch(studentName) && this.pct(d.lunch_completion) === 0 && d.lunch !== 'N/A') anomalies.push({ severity: 'warning', icon: '🟡', text: `${d.day}: ${name} didn't eat lunch. Their preferences may be changing — trying different options could help.`, type: 'metric' });
             if (this.pct(d.water_completion) === 0) anomalies.push({ severity: 'critical', icon: '🔴', text: `${d.day}: ${name} didn't drink any water. Encouraging water breaks at home can help build this habit.`, type: 'health' });
         });
 
@@ -420,8 +433,8 @@ const AIEngine = {
         if (weekIdx > 0) {
             const prevActive = this.getActive(weeks[weekIdx - 1]);
             if (prevActive.length && active.length) {
-                const metrics = ['snack_completion', 'lunch_completion', 'water_completion'];
-                const labels = ['Snack', 'Lunch', 'Water'];
+                const metrics = this.studentHasLunch(studentName) ? ['snack_completion', 'lunch_completion', 'water_completion'] : ['snack_completion', 'water_completion'];
+                const labels = this.studentHasLunch(studentName) ? ['Snack', 'Lunch', 'Water'] : ['Snack', 'Water'];
                 metrics.forEach((m, i) => {
                     const curr = this.avg(active, m);
                     const prev = this.avg(prevActive, m);
@@ -447,7 +460,7 @@ const AIEngine = {
             if (lowStreak >= 3) anomalies.push({ severity: 'warning', icon: '🟠', text: `${label} intake was below 50% on ${lowStreak} days this week. Your child may benefit from trying different options — even small changes can make a difference!`, type: 'pattern' });
         };
         checkStreak('snack_completion', 'Snacks');
-        checkStreak('lunch_completion', 'Lunch');
+        if (this.studentHasLunch(studentName)) checkStreak('lunch_completion', 'Lunch');
         checkStreak('water_completion', 'Water');
 
         // Variance anomaly (wildly inconsistent within the week)
@@ -482,15 +495,18 @@ const AIEngine = {
             }
 
             const snackAvg = this.avg(active, 'snack_completion');
-            const lunchAvg = this.avg(active, 'lunch_completion');
+            const hasLunch = this.studentHasLunch(studentName);
+            const lunchAvg = hasLunch ? this.avg(active, 'lunch_completion') : 0;
             const waterAvg = this.avg(active, 'water_completion');
-            const overall = (snackAvg + lunchAvg + waterAvg) / 3;
+            const overall = hasLunch ? (snackAvg + lunchAvg + waterAvg) / 3 : (snackAvg + waterAvg) / 2;
 
             if (waterAvg < 50) recs.push({ priority: 'urgent', icon: '💧', text: `${name}: Water intake critically low (${Math.round(waterAvg)}%). Ensure frequent water reminders.`, student: studentName });
             else if (waterAvg < 70) recs.push({ priority: 'important', icon: '💧', text: `${name}: Water intake below target (${Math.round(waterAvg)}%). Encourage more hydration.`, student: studentName });
 
-            if (lunchAvg < 50) recs.push({ priority: 'urgent', icon: '🍽️', text: `${name}: Lunch completion very low (${Math.round(lunchAvg)}%). Check food preferences or portion size.`, student: studentName });
-            else if (lunchAvg < 70) recs.push({ priority: 'important', icon: '🍽️', text: `${name}: Lunch completion needs attention (${Math.round(lunchAvg)}%).`, student: studentName });
+            if (hasLunch) {
+                if (lunchAvg < 50) recs.push({ priority: 'urgent', icon: '🍽️', text: `${name}: Lunch completion very low (${Math.round(lunchAvg)}%). Check food preferences or portion size.`, student: studentName });
+                else if (lunchAvg < 70) recs.push({ priority: 'important', icon: '🍽️', text: `${name}: Lunch completion needs attention (${Math.round(lunchAvg)}%).`, student: studentName });
+            }
 
             if (snackAvg < 50) recs.push({ priority: 'important', icon: '🍎', text: `${name}: Snack completion low (${Math.round(snackAvg)}%). Offer favourite fruits or alternatives.`, student: studentName });
 
@@ -510,7 +526,10 @@ const AIEngine = {
                 if (prevWeek) {
                     const prevActive = this.getActive(prevWeek);
                     if (prevActive.length) {
-                        const prevOverall = (this.avg(prevActive, 'snack_completion') + this.avg(prevActive, 'lunch_completion') + this.avg(prevActive, 'water_completion')) / 3;
+                        const prevSnack = this.avg(prevActive, 'snack_completion');
+                        const prevLunch = hasLunch ? this.avg(prevActive, 'lunch_completion') : 0;
+                        const prevWater = this.avg(prevActive, 'water_completion');
+                        const prevOverall = hasLunch ? (prevSnack + prevLunch + prevWater) / 3 : (prevSnack + prevWater) / 2;
                         if (prevOverall - overall > 25) recs.push({ priority: 'important', icon: '📉', text: `${name}: Performance dropped ${Math.round(prevOverall - overall)}% from last week. Check if everything is okay.`, student: studentName });
                     }
                 }
