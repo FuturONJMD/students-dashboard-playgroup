@@ -473,21 +473,22 @@
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
         function isValidVal(v) { return v && v !== 'N/A' && v !== '-'; }
         function hasData(d) {
-            if (isValidVal(d.arrival_time)) return true;
-            if (isValidVal(d.snacks)) return true;
-            if (isValidVal(d.lunch)) return true;
+            // School day if ANY field has data (including '-' which means absent but tracked)
+            if (d.arrival_time && d.arrival_time !== 'N/A') return true;
+            if (d.snacks && d.snacks !== 'N/A') return true;
+            if (d.lunch && d.lunch !== 'N/A') return true;
             if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return true;
             return false;
         }
         function isAbsent(d) {
             // If no data entered at all, this is a future/excluded day
             if (!hasData(d)) return true;
-            // If child has arrival time recorded, they are PRESENT
+            // If child has meaningful data (not just dashes), they are PRESENT
             if (isValidVal(d.arrival_time)) return false;
-            // If food/water data exists, they are PRESENT
             if (isValidVal(d.snacks)) return false;
             if (isValidVal(d.lunch)) return false;
             if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return false;
+            // All fields are dashes = absent
             return true;
         }
 
