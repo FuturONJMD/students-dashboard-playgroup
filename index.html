@@ -412,6 +412,7 @@
         let selectedWeekIdx = 0; // will be set to latest week on data load
 
 
+        const LUNCH_STUDENTS = ['PRASASTHA','BHAVYESH','SHAANVIKA','CHAKRI'];
         const ALL_DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
 
         // Detect month from data (week labels like "AUGUST 1ST WEEK" or date ranges)
@@ -608,10 +609,11 @@
 
         function renderOverview(days, week) {
             const active = getActiveDays(days);
+            const hasLunch = LUNCH_STUDENTS.includes(selectedStudent);
             // Saturday is half-day (snacks only, no lunch) — exclude Saturday from lunch average
             const lunchDays = active.filter(d => d.day !== 'SATURDAY');
             const snackAvg = active.length ? active.reduce((s, d) => s + pct(d.snack_completion), 0) / active.length : 0;
-            const lunchAvg = lunchDays.length ? lunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / lunchDays.length : 0;
+            const lunchAvg = hasLunch && lunchDays.length ? lunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / lunchDays.length : 0;
             const waterAvg = active.length ? active.reduce((s, d) => s + pct(d.water_completion), 0) / active.length : 0;
             const bottleTotal = active.reduce((s, d) => s + d.bottle_refill, 0);
             // Only count school days that have data (excludes future days, 2nd/4th Saturdays, public holidays)
@@ -619,15 +621,15 @@
 
             let html = `
                 <div class="section-header">MEALS & HYDRATION</div>
-                <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+                <div class="kpi-grid" style="grid-template-columns:repeat(${hasLunch ? 3 : 2},1fr);">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
                         <div class="kpi-label">Snack Eaten</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div><div class="kpi-sublabel">Your child finished ${Math.round(snackAvg)}% of snacks this week</div>
                     </div>
-                    <div class="kpi-card border-green">
+                    ${hasLunch ? `<div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
                         <div class="kpi-label">Lunch Eaten</div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div><div class="kpi-sublabel">Your child finished ${Math.round(lunchAvg)}% of lunch served at school</div>
-                    </div>
+                    </div>` : ''}
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
                         <div class="kpi-label">Water Drinking</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div><div class="kpi-sublabel">Your child drank ${Math.round(waterAvg)}% of water at school (WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L during school hours for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})</div>
@@ -651,16 +653,16 @@
             `;
 
             // Daily Nutrition Insight - calculates overall nutrition % from food + water
-            // Saturday = half-day (snacks + water only, no lunch)
+            // Nutrition per day - lunch students get 3-component formula, others get 2-component
             const nutritionPerDay = active.map(d => {
                 const snack = pct(d.snack_completion);
-                const lunch = pct(d.lunch_completion);
                 const water = pct(d.water_completion);
-                if (d.day === 'SATURDAY') {
-                    // Half-day: only snacks (45%) + water (55%)
+                if (!hasLunch || d.day === 'SATURDAY') {
+                    // No lunch: snacks (45%) + water (55%)
                     return Math.round((snack * 0.45) + (water * 0.55));
                 }
-                // Full day: snacks (25%) + lunch (45%) + water (30%)
+                const lunch = pct(d.lunch_completion);
+                // Full day with lunch: snacks (25%) + lunch (45%) + water (30%)
                 return Math.round((snack * 0.25) + (lunch * 0.45) + (water * 0.30));
             });
             const avgNutrition = nutritionPerDay.length ? Math.round(nutritionPerDay.reduce((s, v) => s + v, 0) / nutritionPerDay.length) : 0;
@@ -678,11 +680,11 @@
                             <div style="font-size:0.68rem; font-weight:600; color:${nutritionColor}; margin-top:2px;">${nutritionGrade}</div>
                         </div>
                         <div style="flex:1;">
-                            <div style="font-size:0.78rem; color:#cbd5e1; line-height:1.6; margin-bottom:10px;">This score represents how well your child met their daily nutrition needs at school, combining snack intake (25%), lunch box completion (45%), and water drinking (30%) as per WHO guidelines for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}.</div>
+                            <div style="font-size:0.78rem; color:#cbd5e1; line-height:1.6; margin-bottom:10px;">This score represents how well your child met their daily nutrition needs at school, combining ${hasLunch ? 'snack intake (25%), lunch box completion (45%), and water drinking (30%)' : 'snack intake (45%) and water drinking (55%)'} as per WHO guidelines for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}.</div>
                             <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                                <span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(139,92,246,0.1); color:#a78bfa; border:1px solid rgba(139,92,246,0.2);">Snacks: 25%</span>
-                                <span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(16,185,129,0.1); color:#34d399; border:1px solid rgba(16,185,129,0.2);">Lunch: 45%</span>
-                                <span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(59,130,246,0.1); color:#60a5fa; border:1px solid rgba(59,130,246,0.2);">Water: 30%</span>
+                                <span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(139,92,246,0.1); color:#a78bfa; border:1px solid rgba(139,92,246,0.2);">Snacks: ${hasLunch ? '25' : '45'}%</span>
+                                ${hasLunch ? '<span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(16,185,129,0.1); color:#34d399; border:1px solid rgba(16,185,129,0.2);">Lunch: 45%</span>' : ''}
+                                <span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(59,130,246,0.1); color:#60a5fa; border:1px solid rgba(59,130,246,0.2);">Water: ${hasLunch ? '30' : '55'}%</span>
                             </div>
                         </div>
                     </div>
@@ -725,10 +727,10 @@
             }
 
             html += `<div class="section-header">DAILY SNAPSHOT</div>`;
-            html += `<div style="display:grid; grid-template-columns:1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr; gap:18px; padding:0.6rem 0; border-bottom:1px solid #334155; margin-bottom:0.4rem;">
+            html += `<div style="display:grid; grid-template-columns:${hasLunch ? '1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr' : '1fr 1.8fr 1.8fr 0.7fr 0.7fr'}; gap:18px; padding:0.6rem 0; border-bottom:1px solid #334155; margin-bottom:0.4rem;">
                 <span style="font-size:0.62rem; color:#64748b; font-weight:600;">DAY / DATE / ARRIVAL</span>
                 <span style="font-size:0.62rem; color:#64748b; font-weight:600;">SNACKS / % COMPLETION</span>
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">LUNCH / % COMPLETION</span>
+                ${hasLunch ? '<span style="font-size:0.62rem; color:#64748b; font-weight:600;">LUNCH / % COMPLETION</span>' : ''}
                 <span style="font-size:0.62rem; color:#64748b; font-weight:600;">INTERESTED IN / WATER</span>
                 <span style="font-size:0.62rem; color:#64748b; font-weight:600;">BOTTLE REFILLED</span>
                 <span style="font-size:0.62rem; color:#64748b; font-weight:600;">UNIFORM</span>
@@ -750,10 +752,10 @@
                 const sp = pct(d.snack_completion), lp = pct(d.lunch_completion), wp = pct(d.water_completion);
                 const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? '<span class="badge badge-green">Uniform</span>' : String(d.uniform || '').toUpperCase() === 'NO' ? '<span class="badge badge-yellow">No</span>' : String(d.uniform || '').toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
                 html += `
-                    <div style="display:grid; grid-template-columns:1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
+                    <div style="display:grid; grid-template-columns:${hasLunch ? '1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr' : '1fr 1.8fr 1.8fr 0.7fr 0.7fr'}; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#94a3b8; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
                         <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% completed</div></div>
-                        <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% completed</div></div>
+                        ${hasLunch ? `<div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% completed</div></div>` : ''}
                         <div><div class="snap-value">${d.interested_in}</div><div style="font-size:0.62rem; color:#60a5fa; margin-top:5px; font-weight:500;">Water: ${wp}%</div></div>
                         <div style="text-align:center;"><div style="font-size:1rem; font-weight:700; color:#fbbf24;">${d.bottle_refill}</div><div style="font-size:0.58rem; color:#64748b; font-weight:500;">bottles</div></div>
                         <div style="text-align:center;">${uniformBadge}</div>
