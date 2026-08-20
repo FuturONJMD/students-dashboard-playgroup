@@ -374,14 +374,17 @@
 
         /* Print / PDF styles - optimized for readability */
         @media print {
-            .sidebar, .pdf-btn, .mobile-nav { display: none !important; }
-            .main { margin-left: 0 !important; padding: 1rem !important; max-width: 100% !important; }
+            .sidebar, .pdf-btn, .mobile-nav, .theme-toggle { display: none !important; }
+            .main { margin-left: 0 !important; padding: 1rem !important; max-width: 100% !important; opacity: 1 !important; transform: none !important; }
             body { background: #ffffff !important; color: #1a1a1a !important; font-size: 11pt !important; line-height: 1.6 !important; }
+            body::before { display: none !important; }
             
             /* Cards and containers */
-            .school-banner, .greeting-card, .kpi-card, .student-progress, .day-table, .ai-card, .student-profile-card, .health-card {
-                background: #ffffff !important; border: 1.5px solid #d1d5db !important; color: #1a1a1a !important; box-shadow: none !important;
+            .school-banner, .greeting-card, .kpi-card, .student-progress, .day-table, .ai-card, .student-profile-card, .health-card, .skeleton-card, .profile-banner, .formal-header {
+                background: #ffffff !important; border: 1.5px solid #d1d5db !important; color: #1a1a1a !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
             }
+            .profile-name { color: #000000 !important; }
+            .profile-class { color: #1e40af !important; }
             .school-banner { padding: 12px !important; }
             .school-banner::before { display: none !important; }
             .kpi-card::before { display: none !important; }
@@ -1353,7 +1356,11 @@
         }
 
         function downloadPDF() {
-            window.print();
+            // Ensure content is fully visible before printing
+            const main = document.getElementById('main');
+            main.style.opacity = '1';
+            main.style.transform = 'none';
+            setTimeout(() => { window.print(); }, 100);
         }
 
         function selectStudent(s) { selectedStudent = s; selectedWeekIdx = studentsData[s].length - 1; render(); }
