@@ -14,7 +14,7 @@
     <meta name="description" content="FuturON Preschool - Student Daily Updates Dashboard">
     <meta name="format-detection" content="telephone=yes">
     <link rel="apple-touch-icon" href="images/school-logo.jpg">
-    <title>FuturON Preschool - Student Daily Updates</title>
+    <title>FuturON Preschool - Student Progress Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -110,7 +110,7 @@
         .logo-text { font-weight: 700; font-size: 0.95rem; color: #f8fafc; }
         .logo-sub { color: #64748b; font-size: 0.7rem; margin-top: 2px; font-weight: 500; }
         
-        .nav-category { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; margin: 1.8rem 0 0.6rem; font-weight: 600; }
+        .nav-category { font-size: 0.65rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.12em; margin: 1.8rem 0 0.6rem; font-weight: 700; }
         .nav-item { padding: 0.55rem 0.9rem; border-radius: 8px; cursor: pointer; font-size: 0.82rem; color: #94a3b8; margin-bottom: 3px; transition: all 0.15s ease; font-weight: 500; }
         .nav-item:hover { background: #334155; color: #f1f5f9; }
         .nav-item.active { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #ffffff; font-weight: 600; box-shadow: 0 2px 8px rgba(59,130,246,0.3); }
@@ -178,7 +178,7 @@
             transition: all 0.3s ease;
         }
         .greeting-title { font-size: 1.35rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.02em; }
-        .greeting-subtitle { font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; font-weight: 400; }
+        .greeting-subtitle { font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem; font-weight: 400; }
         .progress-line { height: 3px; width: 180px; border-radius: 2px; background: linear-gradient(90deg, #3b82f6 60%, #1e293b 60%); margin-top: 1.2rem; opacity: 0.8; }
         
         .health-card { text-align: center; padding: 1.2rem 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(51,65,85,0.5); border-radius: 20px; min-width: 120px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: all 0.3s ease; }
@@ -462,6 +462,17 @@
 
         const ALL_DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
 
+        // Format week label professionally (e.g., "JULY 2ND WEEK" → "Week 2 — July")
+        function formatWeekLabel(label) {
+            if (!label) return '';
+            const m = label.match(/(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+(\d+)\w*\s+WEEK/i);
+            if (m) {
+                const month = m[1].charAt(0) + m[1].slice(1).toLowerCase();
+                return `Week ${m[2]} \u2014 ${month}`;
+            }
+            return label;
+        }
+
         // Detect month from data (week labels like "AUGUST 1ST WEEK" or date ranges)
         function getMonthFromData() {
             const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
@@ -588,9 +599,9 @@
                 html += `<div class="nav-item active">${selectedStudent.charAt(0) + selectedStudent.slice(1).toLowerCase()}</div>`;
             }
 
-            html += `<div class="nav-category">TIME PERIOD</div>`;
+            html += `<div class="nav-category">ACADEMIC PERIOD</div>`;
             weeks.forEach((w, i) => {
-                html += `<div class="nav-item ${i === selectedWeekIdx ? 'active' : ''}" onclick="selectWeek(${i})">${w.label}</div>`;
+                html += `<div class="nav-item ${i === selectedWeekIdx ? 'active' : ''}" onclick="selectWeek(${i})">${formatWeekLabel(w.label)}</div>`;
             });
 
             html += `<div style="margin-top:auto; padding-top:2rem; text-align:center;"><p style="font-size:0.62rem; color:#475569;">${SCHOOL.class} | ${getMonthFromData()}</p></div>`;
@@ -602,6 +613,8 @@
             const days = getWeekDays(week);
             const hour = new Date().getHours();
             const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+            const studentNameFormatted = selectedStudent.charAt(0) + selectedStudent.slice(1).toLowerCase();
+            document.title = `${studentNameFormatted} | ${formatWeekLabel(week.label)} — FuturON Preschool`;
             const daysPresent = getActiveDays(days).length;
             // Only count days that have data entered (excludes future days, 2nd/4th Sat, public holidays)
             const totalDaysInWeek = days.filter(d => hasData(d)).length || daysPresent;
@@ -610,7 +623,6 @@
             const badgeText = attendancePct >= 80 ? 'EXCELLENT' : attendancePct >= 60 ? 'GOOD' : 'NEEDS ATTENTION';
 
             const studentInitial = selectedStudent.charAt(0);
-            const studentNameFormatted = selectedStudent.charAt(0) + selectedStudent.slice(1).toLowerCase();
 
             let html = `
                 <div class="school-banner" style="flex-direction:column; align-items:stretch; gap:0;">
@@ -651,7 +663,7 @@
                 students.forEach(s => { studentOpts += `<option value="${s}" ${s === selectedStudent ? 'selected' : ''}>${s.charAt(0) + s.slice(1).toLowerCase()}</option>`; });
             }
             let weekOpts = '';
-            weeks.forEach((w, i) => { weekOpts += `<option value="${i}" ${i === selectedWeekIdx ? 'selected' : ''}>${w.label}</option>`; });
+            weeks.forEach((w, i) => { weekOpts += `<option value="${i}" ${i === selectedWeekIdx ? 'selected' : ''}>${formatWeekLabel(w.label)}</option>`; });
             html += `<div class="mobile-nav">`;
             if (!isParentView) html += `<select onchange="selectStudent(this.value)">${studentOpts}</select>`;
             html += `<select onchange="selectWeek(Number(this.value))">${weekOpts}</select>`;
@@ -663,7 +675,7 @@
                         <img src="images/${selectedStudent}.jpg" alt="${studentNameFormatted}" class="profile-avatar" onerror="this.outerHTML='<div style=\\'width:70px;height:70px;border-radius:16px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff;\\'>${studentInitial}</div>'">
                         <div class="profile-info">
                             <div class="profile-name">${studentNameFormatted}</div>
-                            <div class="profile-class">${SCHOOL.class} | ${week.date_range || ''}</div>
+                            <div class="profile-class">${SCHOOL.class} | ${formatWeekLabel(week.label)}${week.date_range ? ' (' + week.date_range + ')' : ''}</div>
                             <div class="profile-status">
                                 <span class="badge badge-green" style="font-size:0.6rem;">${attendancePct}% Attendance</span>
                                 <span class="badge ${badgeClass}" style="font-size:0.6rem;">${badgeText}</span>
