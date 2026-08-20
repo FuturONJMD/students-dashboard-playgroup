@@ -645,10 +645,46 @@
         function renderMonthlySummary() {
             const weeks = studentsData[selectedStudent];
             if (!weeks || weeks.length < 2) return '';
+            const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+
+            // Determine the calendar month of the currently selected week
+            const selectedWeek = weeks[selectedWeekIdx];
+            let selectedMonth = '';
+            // Try from week label first (e.g., "JULY 2ND WEEK")
+            const lbl = (selectedWeek.label || '').toUpperCase();
+            for (const m of months) { if (lbl.includes(m)) { selectedMonth = m; break; } }
+            // Fallback: try from date_range or first day's date
+            if (!selectedMonth && selectedWeek.date_range) {
+                const dr = selectedWeek.date_range.toUpperCase();
+                for (const m of months) { if (dr.includes(m.substring(0, 3))) { selectedMonth = m; break; } }
+            }
+            if (!selectedMonth && selectedWeek.days[0] && selectedWeek.days[0].date) {
+                const dm = String(selectedWeek.days[0].date).match(/\d{1,2}\/(\d{1,2})\/\d{4}/);
+                if (dm) selectedMonth = months[parseInt(dm[1]) - 1] || '';
+            }
+            if (!selectedMonth) return '';
+
+            const monthDisplay = selectedMonth.charAt(0) + selectedMonth.slice(1).toLowerCase();
+
+            // Filter weeks belonging to this calendar month
+            const monthWeeks = [];
+            weeks.forEach((w, i) => {
+                const wlbl = (w.label || '').toUpperCase();
+                let wMonth = '';
+                for (const m of months) { if (wlbl.includes(m)) { wMonth = m; break; } }
+                if (!wMonth && w.days[0] && w.days[0].date) {
+                    const dm = String(w.days[0].date).match(/\d{1,2}\/(\d{1,2})\/\d{4}/);
+                    if (dm) wMonth = months[parseInt(dm[1]) - 1] || '';
+                }
+                if (wMonth === selectedMonth) monthWeeks.push({ week: w, idx: i });
+            });
+
+            if (monthWeeks.length === 0) return '';
+
             let totalPresent = 0, totalAbsent = 0, totalHolidays = 0, totalSchoolDays = 0;
             const weekScores = [];
-            weeks.forEach((w, i) => {
-                const days = w.days;
+            monthWeeks.forEach((mw, mi) => {
+                const days = mw.week.days;
                 const holidays = days.filter(d => isHoliday(d)).length;
                 const school = days.filter(d => hasData(d) && !isFutureDay(d)).length;
                 const present = days.filter(d => hasData(d) && !isFutureDay(d) && !isAbsent(d)).length;
@@ -657,7 +693,6 @@
                 totalSchoolDays += school;
                 totalPresent += present;
                 totalAbsent += absent;
-                // Nutrition score for this week
                 const active = days.filter(d => hasData(d) && !isFutureDay(d) && !isAbsent(d));
                 if (active.length > 0) {
                     const lunchDays = active.filter(d => d.day !== 'SATURDAY');
@@ -665,19 +700,18 @@
                     const lunchAvg = lunchDays.length ? lunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / lunchDays.length : 0;
                     const waterAvg = active.reduce((s, d) => s + pct(d.water_completion), 0) / active.length;
                     const overall = Math.round((snackAvg * 0.25) + (lunchAvg * 0.45) + (waterAvg * 0.30));
-                    weekScores.push({ label: 'W' + (i + 1), score: overall });
-                } else { weekScores.push({ label: 'W' + (i + 1), score: 0 }); }
+                    weekScores.push({ label: 'W' + (mi + 1), score: overall });
+                } else { weekScores.push({ label: 'W' + (mi + 1), score: 0 }); }
             });
             const overallNutrition = weekScores.filter(w => w.score > 0).length ? Math.round(weekScores.filter(w => w.score > 0).reduce((s, w) => s + w.score, 0) / weekScores.filter(w => w.score > 0).length) : 0;
             const attendancePct = totalSchoolDays > 0 ? Math.round((totalPresent / totalSchoolDays) * 100) : 0;
             const maxScore = Math.max(...weekScores.map(w => w.score), 1);
-            // Improvement
             const firstScore = weekScores.find(w => w.score > 0);
             const lastScore = [...weekScores].reverse().find(w => w.score > 0);
             const improvement = firstScore && lastScore ? lastScore.score - firstScore.score : 0;
 
             return `
-                <div class="section-header" style="margin-top:2rem;">MONTHLY SUMMARY</div>
+                <div class="section-header" style="margin-top:2rem;">${monthDisplay.toUpperCase()} MONTHLY SUMMARY</div>
                 <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr); margin-bottom:1.2rem;">
                     <div class="kpi-card" style="border-top:3px solid #22c55e;">
                         <div class="kpi-label">Days Present</div>
@@ -702,7 +736,7 @@
                 </div>
 
                 <div class="ai-card" style="margin-bottom:1.2rem;">
-                    <div class="ai-card-header">Weekly Nutrition Trend</div>
+                    <div class="ai-card-header">${monthDisplay} Nutrition Trend (${monthWeeks.length} weeks)</div>
                     <div style="display:flex; align-items:flex-end; gap:4px; height:120px; padding:1rem 0.5rem 0;">
                         ${weekScores.map(w => {
                             const height = maxScore > 0 ? Math.max(8, (w.score / maxScore) * 100) : 8;
@@ -715,7 +749,7 @@
                         }).join('')}
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding:0.6rem 0.8rem; background:rgba(${improvement >= 0 ? '16,185,129' : '244,63,94'},0.08); border-radius:8px;">
-                        <span style="font-size:0.75rem; color:#94a3b8;">Month Progress</span>
+                        <span style="font-size:0.75rem; color:#94a3b8;">${monthDisplay} Progress</span>
                         <span style="font-size:0.85rem; font-weight:700; color:${improvement >= 0 ? '#34d399' : '#f43f5e'};">${improvement >= 0 ? '+' : ''}${improvement}% ${improvement >= 0 ? 'improvement' : 'decline'}</span>
                     </div>
                 </div>
