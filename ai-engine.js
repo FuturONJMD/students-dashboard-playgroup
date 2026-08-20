@@ -11,6 +11,8 @@ const AIEngine = {
     studentHasLunch(studentName) { return LUNCH_STUDENTS.includes(studentName); },
     // Check if a day has any data entered (vs placeholder/future day)
     hasData(d) {
+        // SECOND SATURDAY is a holiday for all classes — never count as school day
+        if (d.arrival_time && d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return false;
         if (d.date && d.date !== '' && d.date !== 'N/A') return true;
         if (d.arrival_time && d.arrival_time !== 'N/A' && d.arrival_time !== '-') return true;
         if (d.snacks && d.snacks !== 'N/A' && d.snacks !== '-') return true;
@@ -22,8 +24,7 @@ const AIEngine = {
     // Check if child is present — ONLY valid arrival_time means present
     isPresent(d) {
         if (!d.arrival_time || d.arrival_time === 'N/A' || d.arrival_time === '-' || 
-            d.arrival_time === '' || d.arrival_time.toUpperCase() === 'ABSENT' ||
-            d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return false;
+            d.arrival_time === '' || d.arrival_time.toUpperCase() === 'ABSENT') return false;
         return true;
     },
 
