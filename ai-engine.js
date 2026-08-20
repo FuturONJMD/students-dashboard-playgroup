@@ -10,9 +10,18 @@ const AIEngine = {
     // === HELPERS ===
     studentHasLunch(studentName) { return LUNCH_STUDENTS.includes(studentName); },
     // Check if a day has any data entered (vs placeholder/future day)
+    isSecondSaturday(d) {
+        if (d.day !== 'SATURDAY') return false;
+        if (d.arrival_time && d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return true;
+        if (d.date) {
+            const m = String(d.date).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (m) { const day = parseInt(m[1]); if (day >= 8 && day <= 14) return true; }
+        }
+        return false;
+    },
+
     hasData(d) {
-        // SECOND SATURDAY is a holiday for all classes — never count as school day
-        if (d.arrival_time && d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return false;
+        if (this.isSecondSaturday(d)) return false;
         if (d.date && d.date !== '' && d.date !== 'N/A') return true;
         if (d.arrival_time && d.arrival_time !== 'N/A' && d.arrival_time !== '-') return true;
         if (d.snacks && d.snacks !== 'N/A' && d.snacks !== '-') return true;

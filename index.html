@@ -472,9 +472,18 @@
 
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
         function isValidVal(v) { return v && v !== 'N/A' && v !== '-'; }
+        function isSecondSaturday(d) {
+            if (d.day !== 'SATURDAY') return false;
+            if (d.arrival_time && d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return true;
+            if (d.date) {
+                var m = String(d.date).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                if (m) { var day = parseInt(m[1]); if (day >= 8 && day <= 14) return true; }
+            }
+            return false;
+        }
         function hasData(d) {
             // SECOND SATURDAY is a holiday for all classes — never count as school day
-            if (d.arrival_time && d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return false;
+            if (isSecondSaturday(d)) return false;
             // School day if it has a date (sheet tracked this day) OR any field has data
             if (d.date && d.date !== '' && d.date !== 'N/A') return true;
             if (d.arrival_time && d.arrival_time !== 'N/A') return true;
