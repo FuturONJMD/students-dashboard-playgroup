@@ -483,13 +483,11 @@
         function isAbsent(d) {
             // If no data entered at all, this is a future/excluded day
             if (!hasData(d)) return true;
-            // If child has meaningful data (not just dashes), they are PRESENT
-            if (isValidVal(d.arrival_time)) return false;
-            if (isValidVal(d.snacks)) return false;
-            if (isValidVal(d.lunch)) return false;
-            if (d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0) return false;
-            // All fields are dashes = absent
-            return true;
+            // RULE: If arrival_time is NULL/empty/N/A/dash/ABSENT/SECOND SATURDAY → ABSENT
+            if (!d.arrival_time || d.arrival_time === 'N/A' || d.arrival_time === '-' || 
+                d.arrival_time === '' || d.arrival_time.toUpperCase() === 'ABSENT' || 
+                d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return true;
+            return false;
         }
 
         function renderSidebar() {
@@ -689,8 +687,18 @@
                     </div>
                     <div style="font-size:0.68rem; color:#64748b; text-transform:uppercase; font-weight:600; margin-bottom:8px;">Day-wise Nutrition Score</div>
                     <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                        ${active.map((d, i) => `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(${nutritionPerDay[i] >= 80 ? '16,185,129' : nutritionPerDay[i] >= 60 ? '59,130,246' : '245,158,11'},0.08); border:1px solid rgba(${nutritionPerDay[i] >= 80 ? '16,185,129' : nutritionPerDay[i] >= 60 ? '59,130,246' : '245,158,11'},0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:1rem; font-weight:700; color:${nutritionPerDay[i] >= 80 ? '#34d399' : nutritionPerDay[i] >= 60 ? '#60a5fa' : '#fbbf24'};">${nutritionPerDay[i]}%</div></div>`).join('')}
+                        ${week.days.filter(d => hasData(d)).map(d => {
+                            if (isAbsent(d)) {
+                                return `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(244,63,94,0.08); border:1px solid rgba(244,63,94,0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:1rem; font-weight:700; color:#f43f5e;">--</div><div style="font-size:0.55rem; color:#f43f5e; font-weight:600;">ABSENT</div></div>`;
+                            }
+                            const snk = pct(d.snack_completion);
+                            const lnc = pct(d.lunch_completion);
+                            const wtr = pct(d.water_completion);
+                            const dayScore = d.day === 'SATURDAY' ? Math.round((snk * 0.45) + (wtr * 0.55)) : Math.round((snk * 0.25) + (lnc * 0.45) + (wtr * 0.30));
+                            return `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(${dayScore >= 80 ? '16,185,129' : dayScore >= 60 ? '59,130,246' : '245,158,11'},0.08); border:1px solid rgba(${dayScore >= 80 ? '16,185,129' : dayScore >= 60 ? '59,130,246' : '245,158,11'},0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:1rem; font-weight:700; color:${dayScore >= 80 ? '#34d399' : dayScore >= 60 ? '#60a5fa' : '#fbbf24'};">${dayScore}%</div></div>`;
+                        }).join('')}
                     </div>
+                    <div style="font-size:0.65rem; color:#94a3b8; margin-top:6px; font-style:italic;">Score calculated from ${active.length} present day(s) only. Absent days excluded.</div>
                 </div>
             `;
 
