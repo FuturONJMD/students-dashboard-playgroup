@@ -191,8 +191,8 @@
         .badge-purple { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2); }
         
         /* Section headers */
-        .section-header { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; margin: 2.5rem 0 1.2rem; font-weight: 700; position: relative; padding-bottom: 0.6rem; }
-        .section-header::after { content: ''; position: absolute; bottom: 0; left: 0; width: 40px; height: 2px; background: linear-gradient(90deg, #3b82f6, #a78bfa); border-radius: 2px; }
+        .section-header { font-size: 0.75rem; color: #e2e8f0; text-transform: uppercase; letter-spacing: 0.12em; margin: 2.5rem 0 1.2rem; font-weight: 700; position: relative; padding-bottom: 0.6rem; background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .section-header::after { content: ''; position: absolute; bottom: 0; left: 0; width: 50px; height: 2.5px; background: linear-gradient(90deg, #3b82f6, #a78bfa, #f472b6); border-radius: 2px; }
         
         /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 2rem; }
@@ -201,9 +201,9 @@
         .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); border-color: rgba(59,130,246,0.3); }
         .kpi-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.9rem; }
-        .kpi-label { font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 0.3rem; }
+        .kpi-label { font-size: 0.73rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 0.3rem; }
         .kpi-value { font-size: 2.6rem; font-weight: 700; margin: 0.4rem 0; letter-spacing: -0.03em; }
-        .kpi-sublabel { font-size: 0.78rem; color: #94a3b8; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; }
+        .kpi-sublabel { font-size: 0.78rem; color: #a5b4c8; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; }
         .border-purple { border-top: none; }
         .border-purple::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
         .border-green { border-top: none; }
@@ -244,8 +244,8 @@
         /* Daily snapshot */
         .snapshot-row { display: grid; grid-template-columns: 1.2fr 2fr 2fr 2fr 1fr; gap: 12px; padding: 0.8rem 0; border-bottom: 1px solid rgba(51,65,85,0.5); align-items: center; }
         .snap-day { font-size: 0.78rem; font-weight: 600; color: #60a5fa; text-transform: uppercase; }
-        .snap-time { font-size: 0.68rem; color: #64748b; font-weight: 400; }
-        .snap-label { font-size: 0.62rem; color: #64748b; text-transform: uppercase; font-weight: 500; }
+        .snap-time { font-size: 0.68rem; color: #94a3b8; font-weight: 500; }
+        .snap-label { font-size: 0.62rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
         .snap-value { font-size: 0.78rem; color: #e2e8f0; margin: 0.1rem 0; font-weight: 500; }
         .snap-bar { height: 3px; border-radius: 2px; background: #334155; overflow: hidden; margin-top: 4px; }
         .snap-bar-fill { height: 100%; border-radius: 2px; }
@@ -259,7 +259,7 @@
         /* AI Insights */
         .ai-card { background: rgba(15,23,42,0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(100,116,139,0.2); border-radius: 18px; padding: 1.6rem; margin-bottom: 1.4rem; box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05); transition: all 0.3s ease; animation: fadeInUp 0.5s ease; }
         .ai-card:hover { border-color: rgba(59,130,246,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
-        .ai-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; font-weight: 700; font-size: 0.92rem; color: #f1f5f9; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(51,65,85,0.5); }
+        .ai-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; font-weight: 700; font-size: 0.95rem; color: #f8fafc; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(99,102,241,0.3); letter-spacing: 0.02em; }
         .ai-tip { display: flex; align-items: flex-start; gap: 12px; padding: 0.7rem 0; border-bottom: 1px solid rgba(51,65,85,0.4); }
         .ai-tip:last-child { border-bottom: none; }
         .ai-tip-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
@@ -984,12 +984,12 @@
 
             html += `<div class="section-header">DAILY PROGRESS REPORT</div>`;
             html += `<div style="display:grid; grid-template-columns:1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr; gap:18px; padding:0.6rem 0; border-bottom:1px solid #334155; margin-bottom:0.4rem;">
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">DAY / DATE / CHECK-IN</span>
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">MORNING SNACK / INTAKE</span>
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">AFTERNOON MEAL / INTAKE</span>
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">ACTIVITY / HYDRATION</span>
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">REFILLS</span>
-                <span style="font-size:0.62rem; color:#64748b; font-weight:600;">ATTIRE</span>
+                <span style="font-size:0.62rem; color:#93c5fd; font-weight:600;">DAY / DATE / CHECK-IN</span>
+                <span style="font-size:0.62rem; color:#c4b5fd; font-weight:600;">MORNING SNACK / INTAKE</span>
+                <span style="font-size:0.62rem; color:#6ee7b7; font-weight:600;">AFTERNOON MEAL / INTAKE</span>
+                <span style="font-size:0.62rem; color:#7dd3fc; font-weight:600;">ACTIVITY / HYDRATION</span>
+                <span style="font-size:0.62rem; color:#fcd34d; font-weight:600;">REFILLS</span>
+                <span style="font-size:0.62rem; color:#f9a8d4; font-weight:600;">ATTIRE</span>
             </div>`;
             days.forEach(d => {
                 // Skip days with no data at all (future days with no date)
@@ -1001,7 +1001,7 @@
                 const dayDate = getDayDate(d);
                 if (isHoliday(d)) {
                     html += `<div style="display:grid; grid-template-columns:1.2fr 5fr 1fr; gap:8px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
-                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#94a3b8; font-weight:500;">${dayDate}</div></div>
+                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div></div>
                         <div style="color:#a78bfa; font-style:italic; font-size:0.8rem;">${isSecondSaturday(d) ? '2nd Saturday — Institutional Holiday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() ? (d.arrival_time || '').replace(/HOLIDAY/i, '').trim() + ' — School Holiday' : 'School Holiday'}</div>
                         <div><span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">HOLIDAY</span></div>
                     </div>`;
@@ -1009,7 +1009,7 @@
                 }
                 if (isAbsent(d)) {
                     html += `<div style="display:grid; grid-template-columns:1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center; opacity:0.7;">
-                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#94a3b8; font-weight:500;">${dayDate}</div><div class="snap-time" style="color:#f43f5e;">ABSENT</div></div>
+                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time" style="color:#f43f5e;">ABSENT</div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
@@ -1022,7 +1022,7 @@
                 const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? '<span class="badge badge-green">Uniform</span>' : String(d.uniform || '').toUpperCase() === 'NO' ? '<span class="badge badge-yellow">No</span>' : String(d.uniform || '').toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
                 html += `
                     <div style="display:grid; grid-template-columns:1fr 1.6fr 1.6fr 1.6fr 0.7fr 0.7fr; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
-                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#94a3b8; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
+                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
                         <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% completed</div></div>
                         <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% completed</div></div>
                         <div><div class="snap-value">${d.interested_in}</div><div style="font-size:0.62rem; color:#60a5fa; margin-top:5px; font-weight:500;">Water: ${wp}%</div></div>
