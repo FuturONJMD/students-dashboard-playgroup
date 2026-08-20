@@ -467,7 +467,8 @@
             return orderedDays;
         }
         function getActiveDays(days) {
-            return days.filter(d => !isAbsent(d));
+            // Present days only: must have data (not holiday) AND not absent
+            return days.filter(d => hasData(d) && !isAbsent(d));
         }
 
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
@@ -629,8 +630,8 @@
             const lunchAvg = lunchDays.length ? lunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / lunchDays.length : 0;
             const waterAvg = active.length ? active.reduce((s, d) => s + pct(d.water_completion), 0) / active.length : 0;
             const bottleTotal = active.reduce((s, d) => s + d.bottle_refill, 0);
-            // Count holidays this week
-            const holidaysThisWeek = days.filter(d => isHoliday(d)).length;
+            // Count holidays this week (from all days including excluded ones)
+            const holidaysThisWeek = week.days.filter(d => isHoliday(d)).length;
             // Only count school days that have data (excludes holidays)
             const totalSchoolDays = days.filter(d => hasData(d)).length || active.length;
 
