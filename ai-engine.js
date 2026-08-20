@@ -86,7 +86,7 @@ const AIEngine = {
             const found = currentWeek.days.find(d => d.day === dayName);
             return found || { day: dayName, arrival_time: 'N/A', snacks: 'N/A', lunch: 'N/A', snack_completion: 0, lunch_completion: 0, water_completion: 0 };
         });
-        const totalSchoolDays = weekDays.filter(d => !(d.snacks === 'N/A' && d.lunch === 'N/A' && d.arrival_time === 'N/A')).length || active.length;
+        const totalSchoolDays = weekDays.filter(d => this.hasData(d)).length || active.length;
 
         // Attendance consistency (max 25 points)
         const attendancePct = (active.length / totalSchoolDays) * 100;
@@ -239,7 +239,7 @@ const AIEngine = {
             const found = currentWeek.days.find(d => d.day === dayName);
             return found || { day: dayName, arrival_time: 'N/A', snacks: 'N/A', lunch: 'N/A', snack_completion: 0, lunch_completion: 0, water_completion: 0 };
         });
-        const totalSchoolDays = allWeekDays.filter(d => !(d.snacks === 'N/A' && d.lunch === 'N/A' && (!d.arrival_time || d.arrival_time === 'N/A'))).length || attendance;
+        const totalSchoolDays = allWeekDays.filter(d => this.hasData(d)).length || attendance;
         const absentDays = totalSchoolDays - attendance;
         const bottleRefills = active.reduce((s, d) => s + d.bottle_refill, 0);
         const weekBottles = bottleRefills + attendance;
@@ -336,7 +336,7 @@ const AIEngine = {
             const found = currentWeek.days.find(d => d.day === dayName);
             return found || { day: dayName, arrival_time: 'N/A', snacks: 'N/A', lunch: 'N/A', snack_completion: 0, lunch_completion: 0, water_completion: 0 };
         });
-        const totalSchoolDays = allWeekDays2.filter(d => !(d.snacks === 'N/A' && d.lunch === 'N/A' && (!d.arrival_time || d.arrival_time === 'N/A'))).length || attendance;
+        const totalSchoolDays = allWeekDays2.filter(d => this.hasData(d)).length || attendance;
 
         // Monthly cumulative
         let monthlyBottles = 0, monthlyDaysPresent = 0;
