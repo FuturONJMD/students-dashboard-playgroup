@@ -26,8 +26,19 @@ const AIEngine = {
         return false;
     },
 
+    isFutureDay(d) {
+        if (!d.date) return false;
+        const m = String(d.date).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+        if (!m) return false;
+        const dayDate = new Date(parseInt(m[3]), parseInt(m[2]) - 1, parseInt(m[1]));
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return dayDate > today;
+    },
+
     hasData(d) {
         if (this.isHoliday(d)) return false;
+        if (this.isFutureDay(d)) return false;
         if (d.date && d.date !== '' && d.date !== 'N/A') return true;
         if (d.arrival_time && d.arrival_time !== 'N/A' && d.arrival_time !== '-') return true;
         if (d.snacks && d.snacks !== 'N/A' && d.snacks !== '-') return true;

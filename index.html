@@ -466,9 +466,19 @@
             }
             return orderedDays;
         }
+        function isFutureDay(d) {
+            // Compare day's date with current date — future days are not school days yet
+            if (!d.date) return false;
+            var m = String(d.date).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (!m) return false;
+            var dayDate = new Date(parseInt(m[3]), parseInt(m[2]) - 1, parseInt(m[1]));
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return dayDate > today;
+        }
         function getActiveDays(days) {
-            // Present days only: must have data (not holiday) AND not absent
-            return days.filter(d => hasData(d) && !isAbsent(d));
+            // Present days only: must have data (not holiday/future) AND not absent
+            return days.filter(d => hasData(d) && !isFutureDay(d) && !isAbsent(d));
         }
 
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
@@ -491,6 +501,8 @@
         function hasData(d) {
             // Holidays are never counted as school days
             if (isHoliday(d)) return false;
+            // Future days are not school days yet
+            if (isFutureDay(d)) return false;
             // School day if it has a date (sheet tracked this day) OR any field has data
             if (d.date && d.date !== '' && d.date !== 'N/A') return true;
             if (d.arrival_time && d.arrival_time !== 'N/A') return true;
@@ -772,6 +784,8 @@
                 // Skip days with no data at all (future days with no date)
                 const hasAnyData = (d.date && d.date !== '') || (d.snacks && d.snacks !== 'N/A') || (d.lunch && d.lunch !== 'N/A') || (d.arrival_time && d.arrival_time !== 'N/A') || d.snack_completion > 0 || d.lunch_completion > 0 || d.water_completion > 0;
                 if (!hasAnyData) return;
+                // Skip future days
+                if (isFutureDay(d)) return;
 
                 const dayDate = getDayDate(d);
                 if (isHoliday(d)) {
