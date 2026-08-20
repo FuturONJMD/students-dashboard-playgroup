@@ -14,19 +14,45 @@
     <meta name="description" content="FuturON Preschool - Student Daily Updates Dashboard">
     <meta name="format-detection" content="telephone=yes">
     <link rel="apple-touch-icon" href="images/school-logo.jpg">
+    <link rel="manifest" href="manifest.json">
     <title>FuturON Preschool - Student Progress Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0a0f1e;
+            --bg-card: rgba(15,23,42,0.5);
+            --bg-sidebar: rgba(15,23,42,0.85);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-subtle: rgba(51,65,85,0.5);
+            --border-card: rgba(100,116,139,0.2);
+            --card-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            --card-inset: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        body.theme-light {
+            --bg-primary: #f1f5f9;
+            --bg-card: rgba(255,255,255,0.85);
+            --bg-sidebar: rgba(255,255,255,0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-subtle: rgba(203,213,225,0.8);
+            --border-card: rgba(148,163,184,0.25);
+            --card-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            --card-inset: inset 0 1px 0 rgba(255,255,255,0.8);
+        }
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0f1e;
-            color: #e2e8f0;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.5;
             font-variant-numeric: tabular-nums;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         body::before {
             content: '';
@@ -144,10 +170,10 @@
         .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
         .sidebar {
             width: 260px;
-            background: rgba(15,23,42,0.85);
+            background: var(--bg-sidebar);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(51,65,85,0.5);
+            border-right: 1px solid var(--border-subtle);
             padding: 1.5rem 1rem;
             position: fixed;
             top: 0;
@@ -249,7 +275,7 @@
         
         /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 2rem; }
-        .kpi-card { background: rgba(15,23,42,0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(100,116,139,0.2); border-radius: 20px; padding: 1.6rem; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05); }
+        .kpi-card { background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-card); border-radius: 20px; padding: 1.6rem; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; box-shadow: var(--card-shadow), var(--card-inset); }
         .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08); }
         .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); border-color: rgba(59,130,246,0.3); }
@@ -310,7 +336,7 @@
         .tab:hover:not(.active) { color: #f1f5f9; background: #334155; }
         
         /* AI Insights */
-        .ai-card { background: rgba(15,23,42,0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(100,116,139,0.2); border-radius: 18px; padding: 1.6rem; margin-bottom: 1.4rem; box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05); transition: all 0.3s ease; animation: fadeInUp 0.5s ease; }
+        .ai-card { background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-card); border-radius: 18px; padding: 1.6rem; margin-bottom: 1.4rem; box-shadow: var(--card-shadow), var(--card-inset); transition: all 0.3s ease; animation: fadeInUp 0.5s ease; }
         .ai-card:hover { border-color: rgba(59,130,246,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
         .ai-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; font-weight: 700; font-size: 0.95rem; color: #f8fafc; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(99,102,241,0.3); letter-spacing: 0.02em; }
         .ai-tip { display: flex; align-items: flex-start; gap: 12px; padding: 0.7rem 0; border-bottom: 1px solid rgba(51,65,85,0.4); }
@@ -488,6 +514,54 @@
             .student-avatar { width: 70px; height: 70px; }
             .student-avatar-placeholder { width: 70px; height: 70px; font-size: 1.5rem; }
         }
+        /* Light theme overrides */
+        body.theme-light::before { background: radial-gradient(ellipse at 20% 20%, rgba(59,130,246,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.04) 0%, transparent 50%); }
+        body.theme-light .school-banner { background: rgba(255,255,255,0.7); border-color: rgba(148,163,184,0.3); }
+        body.theme-light .school-banner::before { background: linear-gradient(135deg, rgba(59,130,246,0.03) 0%, rgba(139,92,246,0.02) 50%, rgba(245,158,11,0.01) 100%); }
+        body.theme-light .school-name { color: #0f172a; }
+        body.theme-light .school-address { color: #475569; }
+        body.theme-light .profile-banner { background: linear-gradient(135deg, rgba(219,234,254,0.7), rgba(237,233,254,0.5)); border-color: rgba(148,163,184,0.3); }
+        body.theme-light .profile-name { color: #0f172a; }
+        body.theme-light .nav-item { color: #475569; }
+        body.theme-light .nav-item:hover { background: #e2e8f0; color: #0f172a; }
+        body.theme-light .nav-item.active { background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; }
+        body.theme-light .logo-text { color: #0f172a; }
+        body.theme-light .logo-sub { color: #64748b; }
+        body.theme-light .kpi-label { color: #475569; }
+        body.theme-light .kpi-sublabel { color: #64748b; }
+        body.theme-light .ai-card-header { color: #0f172a; border-bottom-color: rgba(148,163,184,0.3); }
+        body.theme-light .ai-tip-text { color: #1e293b; }
+        body.theme-light .ai-summary-text { color: #1e293b; }
+        body.theme-light .snap-day { color: #1e40af; }
+        body.theme-light .snap-time { color: #475569; }
+        body.theme-light .snap-value { color: #0f172a; }
+        body.theme-light .section-header { background: linear-gradient(90deg, #1e40af, #6d28d9); -webkit-background-clip: text; background-clip: text; }
+        body.theme-light .cal-day { background: rgba(241,245,249,0.8); border-color: rgba(203,213,225,0.5); }
+        body.theme-light .cal-day-name { color: #64748b; }
+        body.theme-light .cal-day-date { color: #0f172a; }
+        body.theme-light .formal-header { color: #334155; background: rgba(241,245,249,0.8); border-left-color: rgba(37,99,235,0.5); }
+        body.theme-light .report-footer p { color: #475569; }
+        body.theme-light .report-footer .signature-line { color: #1e293b; }
+        body.theme-light .heatmap-header { color: #475569; }
+        body.theme-light .achievement { border-color: rgba(0,0,0,0.1); }
+        
+        /* Theme toggle button */
+        .theme-toggle { position: fixed; top: 1.2rem; right: 5rem; z-index: 1001; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-card); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--card-shadow); }
+        .theme-toggle:hover { transform: scale(1.1); }
+        .theme-toggle svg { width: 20px; height: 20px; transition: transform 0.3s ease; }
+        body.theme-light .theme-toggle svg { transform: rotate(180deg); }
+        
+        /* Skeleton loading */
+        .skeleton-card { background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 20px; padding: 1.6rem; text-align: center; }
+        .skeleton-line { height: 12px; border-radius: 6px; background: linear-gradient(90deg, rgba(100,116,139,0.1) 25%, rgba(100,116,139,0.2) 50%, rgba(100,116,139,0.1) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; margin: 8px auto; }
+        .skeleton-circle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(90deg, rgba(100,116,139,0.1) 25%, rgba(100,116,139,0.2) 50%, rgba(100,116,139,0.1) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; margin: 0 auto 12px; }
+        
+        /* Week comparison arrows */
+        .kpi-delta { font-size: 0.6rem; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: 4px; }
+        .kpi-delta-up { color: #10b981; background: rgba(16,185,129,0.1); }
+        .kpi-delta-down { color: #f43f5e; background: rgba(244,63,94,0.1); }
+        .kpi-delta-stable { color: #64748b; background: rgba(100,116,139,0.08); }
+
         /* iOS safe area padding */
         @supports (padding-bottom: env(safe-area-inset-bottom)) {
             .main { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }
@@ -508,8 +582,13 @@
 <body>
     <div class="app">
         <aside class="sidebar" id="sidebar"></aside>
-        <main class="main" id="main"></main>
+        <main class="main" id="main" style="transition: opacity 0.2s ease, transform 0.2s ease;"></main>
     </div>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle theme">
+        <svg id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
     <button class="pdf-btn" onclick="downloadPDF()" title="Download as PDF">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download PDF
@@ -518,6 +597,21 @@
     <script src="sheets-fetcher.js?v=20260730a"></script>
     <script src="ai-engine.js?v=20260730a"></script>
     <script>
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('theme-light');
+            localStorage.setItem('futuron-theme', isLight ? 'light' : 'dark');
+            document.getElementById('theme-icon-dark').style.display = isLight ? 'none' : 'block';
+            document.getElementById('theme-icon-light').style.display = isLight ? 'block' : 'none';
+        }
+        // Restore saved theme
+        if (localStorage.getItem('futuron-theme') === 'light') {
+            document.body.classList.add('theme-light');
+            document.getElementById('theme-icon-dark').style.display = 'none';
+            document.getElementById('theme-icon-light').style.display = 'block';
+        }
+
         // Check for parent-specific URL: ?student=NAME
         const urlParams = new URLSearchParams(window.location.search);
         const parentMode = urlParams.get('student');
@@ -979,6 +1073,30 @@
             const snackSpark = active.map(d => pct(d.snack_completion));
             const lunchSpark = lunchDays.map(d => pct(d.lunch_completion));
             const waterSpark = active.map(d => pct(d.water_completion));
+            
+            // Week-over-week comparison deltas
+            const weeks = studentsData[selectedStudent];
+            const prevWeekData = selectedWeekIdx > 0 ? weeks[selectedWeekIdx - 1] : null;
+            let snackDelta = null, lunchDelta = null, waterDelta = null;
+            if (prevWeekData) {
+                const prevDays = getWeekDays(prevWeekData);
+                const prevActive = getActiveDays(prevDays);
+                if (prevActive.length) {
+                    const prevLunchDays = prevActive.filter(d => d.day !== 'SATURDAY');
+                    const prevSnack = prevActive.reduce((s, d) => s + pct(d.snack_completion), 0) / prevActive.length;
+                    const prevLunch = prevLunchDays.length ? prevLunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / prevLunchDays.length : 0;
+                    const prevWater = prevActive.reduce((s, d) => s + pct(d.water_completion), 0) / prevActive.length;
+                    snackDelta = Math.round(snackAvg - prevSnack);
+                    lunchDelta = Math.round(lunchAvg - prevLunch);
+                    waterDelta = Math.round(waterAvg - prevWater);
+                }
+            }
+            function deltaHtml(d) {
+                if (d === null) return '';
+                if (d > 2) return `<span class="kpi-delta kpi-delta-up">\u25B2 +${d}%</span>`;
+                if (d < -2) return `<span class="kpi-delta kpi-delta-down">\u25BC ${d}%</span>`;
+                return `<span class="kpi-delta kpi-delta-stable">\u2500 0%</span>`;
+            }
             // Count holidays this week (from all days including excluded ones)
             const holidaysThisWeek = week.days.filter(d => isHoliday(d)).length;
             const holidayNames = week.days.filter(d => isHoliday(d)).map(d => isSecondSaturday(d) ? '2nd Saturday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() || 'Holiday').join(', ');
@@ -1008,15 +1126,15 @@
                 <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-                        <div class="kpi-label">Morning Snack</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div><div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week${sparkline(snackSpark, '#a78bfa')}</div>
+                        <div class="kpi-label">Morning Snack</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div>${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week${sparkline(snackSpark, '#a78bfa')}</div>
                     </div>
                     <div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
-                        <div class="kpi-label">Afternoon Meal</div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div><div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week${sparkline(lunchSpark, '#34d399')}</div>
+                        <div class="kpi-label">Afternoon Meal</div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div>${deltaHtml(lunchDelta)}<div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week${sparkline(lunchSpark, '#34d399')}</div>
                     </div>
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
-                        <div class="kpi-label">Hydration Level</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div><div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
+                        <div class="kpi-label">Hydration Level</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div>${deltaHtml(waterDelta)}<div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
                     </div>
                     <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
                         <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
@@ -1241,7 +1359,26 @@
         function selectStudent(s) { selectedStudent = s; selectedWeekIdx = studentsData[s].length - 1; render(); }
         function selectWeek(i) { selectedWeekIdx = i; render(); }
 
-        function render() { renderSidebar(); renderMain(); const mb = document.getElementById('school-month-badge'); if (mb) mb.textContent = getMonthFromData(); }
+        function render() {
+            const main = document.getElementById('main');
+            main.style.opacity = '0';
+            main.style.transform = 'translateY(6px)';
+            // Show skeleton briefly
+            main.innerHTML = `<div style="padding:2rem 0;"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem;">${'<div class="skeleton-card"><div class="skeleton-circle"></div><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:40%;height:24px;"></div><div class="skeleton-line" style="width:80%"></div></div>'.repeat(4)}</div><div class="skeleton-card" style="height:120px;"><div class="skeleton-line" style="width:30%;margin-bottom:16px;"></div><div class="skeleton-line" style="width:100%;height:60px;"></div></div></div>`;
+            main.style.opacity = '1';
+            main.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                main.style.opacity = '0';
+                main.style.transform = 'translateY(6px)';
+                setTimeout(() => {
+                    renderSidebar(); renderMain();
+                    const mb = document.getElementById('school-month-badge');
+                    if (mb) mb.textContent = getMonthFromData();
+                    main.style.opacity = '1';
+                    main.style.transform = 'translateY(0)';
+                }, 100);
+            }, 200);
+        }
         function renderApp() {
             if (Object.keys(studentsData).length === 0) {
                 document.getElementById('main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;"><div style="text-align:center;"><img src="images/school-logo.jpg" style="width:80px;height:80px;border-radius:14px;margin-bottom:1.2rem;box-shadow:0 4px 16px rgba(0,0,0,0.3);"><div style="font-size:1.3rem;font-weight:700;color:#f8fafc;margin-bottom:0.5rem;">Welcome to FuturON Preschool Jammalamadugu</div><div style="color:#64748b;font-size:0.82rem;">Unable to load. Please check your internet and refresh.</div></div></div>';
