@@ -644,6 +644,7 @@
             const bottleTotal = active.reduce((s, d) => s + d.bottle_refill, 0);
             // Count holidays this week (from all days including excluded ones)
             const holidaysThisWeek = week.days.filter(d => isHoliday(d)).length;
+            const holidayNames = week.days.filter(d => isHoliday(d)).map(d => isSecondSaturday(d) ? '2nd Saturday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() || 'Holiday').join(', ');
             // Only count school days that have data (excludes holidays)
             const totalSchoolDays = days.filter(d => hasData(d)).length || active.length;
 
@@ -675,7 +676,7 @@
                     </div>
                     <div class="kpi-card" style="border-top:3px solid #a78bfa;">
                         <div class="kpi-icon" style="background:rgba(167,139,250,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg></div>
-                        <div class="kpi-label">Holidays</div><div class="kpi-value" style="color:#a78bfa;">${holidaysThisWeek}</div><div class="kpi-sublabel">${holidaysThisWeek > 0 ? 'School closed (2nd Saturday / Holiday)' : 'No holidays this week'}</div>
+                        <div class="kpi-label">Holidays</div><div class="kpi-value" style="color:#a78bfa;">${holidaysThisWeek}</div><div class="kpi-sublabel">${holidaysThisWeek > 0 ? holidayNames : 'No holidays this week'}</div>
                     </div>
                     <div class="kpi-card border-orange">
                         <div class="kpi-icon" style="background:rgba(245,158,11,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l4 10H4L8 2z"/><path d="M12 12v6"/><path d="M8 22h8"/><path d="M12 18h0"/><circle cx="12" cy="18" r="2"/></svg></div>
@@ -724,7 +725,7 @@
                     <div style="display:flex; gap:6px; flex-wrap:wrap;">
                         ${week.days.filter(d => d.date && d.date !== '' && !isFutureDay(d)).map(d => {
                             if (isHoliday(d)) {
-                                return `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:0.85rem; font-weight:700; color:#a78bfa;">H</div><div style="font-size:0.55rem; color:#a78bfa; font-weight:600;">HOLIDAY</div></div>`;
+                                return `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:0.85rem; font-weight:700; color:#a78bfa;">H</div><div style="font-size:0.5rem; color:#a78bfa; font-weight:600;">${isSecondSaturday(d) ? '2nd SAT' : (d.arrival_time||'').replace(/HOLIDAY/i,'').trim() || 'HOLIDAY'}</div></div>`;
                             }
                             if (isAbsent(d)) {
                                 return `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(244,63,94,0.08); border:1px solid rgba(244,63,94,0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:1rem; font-weight:700; color:#f43f5e;">--</div><div style="font-size:0.55rem; color:#f43f5e; font-weight:600;">ABSENT</div></div>`;
@@ -791,7 +792,7 @@
                 if (isHoliday(d)) {
                     html += `<div style="display:grid; grid-template-columns:1.2fr 5fr 1fr; gap:8px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#94a3b8; font-weight:500;">${dayDate}</div></div>
-                        <div style="color:#a78bfa; font-style:italic; font-size:0.8rem;">${isSecondSaturday(d) ? '2nd Saturday — School Holiday' : 'School Holiday'}</div>
+                        <div style="color:#a78bfa; font-style:italic; font-size:0.8rem;">${isSecondSaturday(d) ? '2nd Saturday — School Holiday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() ? (d.arrival_time || '').replace(/HOLIDAY/i, '').trim() + ' — School Holiday' : 'School Holiday'}</div>
                         <div><span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">HOLIDAY</span></div>
                     </div>`;
                     return;
