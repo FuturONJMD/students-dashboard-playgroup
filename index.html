@@ -722,7 +722,7 @@
                     </div>
                     <div style="font-size:0.68rem; color:#64748b; text-transform:uppercase; font-weight:600; margin-bottom:8px;">Day-wise Nutrition Score</div>
                     <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                        ${week.days.filter(d => d.date && d.date !== '').map(d => {
+                        ${week.days.filter(d => d.date && d.date !== '' && !isFutureDay(d)).map(d => {
                             if (isHoliday(d)) {
                                 return `<div style="flex:1; min-width:60px; text-align:center; padding:8px 4px; background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); border-radius:8px;"><div style="font-size:0.6rem; color:#94a3b8;">${d.day.slice(0,3)}</div><div style="font-size:0.85rem; font-weight:700; color:#a78bfa;">H</div><div style="font-size:0.55rem; color:#a78bfa; font-weight:600;">HOLIDAY</div></div>`;
                             }
