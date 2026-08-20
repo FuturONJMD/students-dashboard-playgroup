@@ -851,7 +851,7 @@
             let html = `
                 ${achievements.length > 0 ? `<div class="achievement-strip">${achievements.map(a => `<div class="achievement ${a.cls}">${a.icon} ${a.text}</div>`).join('')}</div>` : ''}
                 <div class="section-header">MEALS & HYDRATION</div>
-                <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+                <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
                         <div class="kpi-label">Snack Eaten</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div><div class="kpi-sublabel">Your child finished ${Math.round(snackAvg)}% of snacks this week</div>
@@ -864,17 +864,14 @@
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
                         <div class="kpi-label">Water Drinking</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div><div class="kpi-sublabel">Your child drank ${Math.round(waterAvg)}% of water at school (WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L during school hours for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})</div>
                     </div>
-                </div>
-
-                <div style="text-align:center; padding:1.5rem; background:rgba(15,23,42,0.5); backdrop-filter:blur(16px); border-radius:20px; border:1px solid rgba(100,116,139,0.2); margin-bottom:1.5rem; box-shadow:0 8px 32px rgba(0,0,0,0.2);">
-                    <div class="radial-gauge">
-                        <svg width="120" height="120" viewBox="0 0 120 120">
-                            <circle cx="60" cy="60" r="45" fill="none" stroke="rgba(51,65,85,0.4)" stroke-width="10"/>
-                            <circle cx="60" cy="60" r="45" fill="none" stroke="${gaugeColor}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}" style="transition:stroke-dashoffset 1s ease;"/>
-                        </svg>
-                        <div class="radial-gauge-value" style="color:${gaugeColor};">${gaugeScore}%</div>
+                    <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
+                        <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
+                            <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(51,65,85,0.4)" stroke-width="7"/><circle cx="40" cy="40" r="30" fill="none" stroke="${gaugeColor}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${2*Math.PI*30}" stroke-dashoffset="${2*Math.PI*30 - (gaugeScore/100)*2*Math.PI*30}" style="transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1s ease;"/></svg>
+                            <div class="radial-gauge-value" style="color:${gaugeColor};font-size:1.2rem;">${gaugeScore}%</div>
+                        </div>
+                        <div class="kpi-label">Overall Score</div>
+                        <div class="kpi-sublabel">${gaugeScore >= 90 ? 'Excellent' : gaugeScore >= 75 ? 'Good' : gaugeScore >= 60 ? 'Moderate' : 'Needs Attention'}</div>
                     </div>
-                    <div class="radial-gauge-label">Overall Nutrition Score</div>
                 </div>
 
                 <div class="section-header">ATTENDANCE & WATER BOTTLES</div>
