@@ -24,6 +24,9 @@
             color: #e2e8f0;
             min-height: 100vh;
             line-height: 1.5;
+            font-variant-numeric: tabular-nums;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         body::before {
             content: '';
@@ -50,9 +53,59 @@
         @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         @keyframes barGrow { from { width: 0%; } }
         @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
         
         .snap-bar-fill { animation: barGrow 0.8s ease-out; }
         .kpi-value { animation: countUp 0.6s ease-out; }
+        
+        /* Staggered KPI card animations */
+        .kpi-card { animation: fadeInUp 0.5s ease backwards; }
+        .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.12s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.19s; }
+        .kpi-card:nth-child(4) { animation-delay: 0.26s; }
+        
+        /* Ripple on nav items */
+        .nav-item { position: relative; overflow: hidden; }
+        .nav-item::after { content: ''; position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: radial-gradient(circle, rgba(255,255,255,0.12) 10%, transparent 60%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+        .nav-item:active::after { opacity: 1; }
+        
+        /* AI tip slide-in */
+        .ai-tip { animation: slideInRight 0.3s ease backwards; }
+        .ai-tip:nth-child(1) { animation-delay: 0.05s; }
+        .ai-tip:nth-child(2) { animation-delay: 0.1s; }
+        .ai-tip:nth-child(3) { animation-delay: 0.15s; }
+        .ai-tip:nth-child(4) { animation-delay: 0.2s; }
+        .ai-tip:nth-child(5) { animation-delay: 0.25s; }
+        
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+        }
+        
+        /* Focus visible for accessibility */
+        .nav-item:focus-visible, .kpi-card:focus-visible, .pdf-btn:focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; border-radius: 8px; }
+        
+        /* Heatmap attendance calendar */
+        .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-top: 0.8rem; }
+        .heatmap-header { font-size: 0.5rem; color: #64748b; text-align: center; font-weight: 600; text-transform: uppercase; padding: 2px 0; }
+        .heatmap-cell { aspect-ratio: 1; border-radius: 3px; min-height: 14px; }
+        .heatmap-present { background: rgba(34,197,94,0.6); }
+        .heatmap-absent { background: rgba(244,63,94,0.6); }
+        .heatmap-holiday { background: rgba(167,139,250,0.5); }
+        .heatmap-future { background: rgba(51,65,85,0.3); }
+        .heatmap-empty { background: transparent; }
+        .heatmap-legend { display: flex; gap: 12px; margin-top: 8px; justify-content: center; flex-wrap: wrap; }
+        .heatmap-legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.55rem; color: #94a3b8; }
+        .heatmap-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+        
+        /* Formal communication */
+        .formal-header { font-size: 0.78rem; color: #94a3b8; line-height: 1.7; padding: 1rem 1.2rem; margin-bottom: 1.5rem; border-left: 3px solid rgba(59,130,246,0.4); background: rgba(15,23,42,0.3); border-radius: 0 10px 10px 0; }
+        .report-footer { text-align: center; padding: 2rem 1rem; margin-top: 2.5rem; border-top: 1px solid rgba(51,65,85,0.4); }
+        .report-footer p { font-size: 0.68rem; color: #475569; line-height: 1.8; }
+        .report-footer .signature-line { font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px; }
+        .report-footer .disclaimer { font-size: 0.6rem; color: #475569; font-style: italic; margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(51,65,85,0.3); }
         
         /* Calendar Strip */
         .cal-strip { display: flex; gap: 4px; padding: 0.6rem 0; margin-bottom: 1rem; }
@@ -202,7 +255,7 @@
         .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); border-color: rgba(59,130,246,0.3); }
         .kpi-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.9rem; }
         .kpi-label { font-size: 0.73rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 0.3rem; }
-        .kpi-value { font-size: 2.6rem; font-weight: 700; margin: 0.4rem 0; letter-spacing: -0.03em; }
+        .kpi-value { font-size: 2.6rem; font-weight: 700; margin: 0.4rem 0; letter-spacing: -0.03em; font-feature-settings: 'tnum'; }
         .kpi-sublabel { font-size: 0.78rem; color: #a5b4c8; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; }
         .border-purple { border-top: none; }
         .border-purple::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
@@ -320,7 +373,7 @@
             .student-overall { color: #374151 !important; }
             .health-value { color: #047857 !important; font-size: 20pt !important; }
             .health-label { color: #374151 !important; font-size: 8pt !important; }
-            .section-header { color: #1f2937 !important; font-size: 9pt !important; font-weight: 700 !important; border-bottom: 1px solid #d1d5db !important; padding-bottom: 4px !important; }
+            .section-header { color: #1f2937 !important; font-size: 9pt !important; font-weight: 700 !important; border-bottom: 1px solid #d1d5db !important; padding-bottom: 4px !important; background: none !important; -webkit-background-clip: unset !important; -webkit-text-fill-color: #1f2937 !important; background-clip: unset !important; }
             
             /* Daily snapshot */
             .snap-day { color: #1e40af !important; font-size: 9pt !important; }
@@ -389,6 +442,20 @@
             .ai-card { break-inside: avoid !important; }
             .kpi-grid { break-inside: avoid !important; }
             .student-progress { break-inside: avoid !important; }
+            
+            /* Formal elements for print */
+            .formal-header { color: #1f2937 !important; border-left-color: #2563eb !important; background: #f0f9ff !important; font-size: 9pt !important; }
+            .report-footer { border-top-color: #d1d5db !important; }
+            .report-footer p { color: #374151 !important; font-size: 8pt !important; }
+            .report-footer .signature-line { color: #1f2937 !important; }
+            .report-footer .disclaimer { color: #6b7280 !important; }
+            .heatmap-present { background: #22c55e !important; }
+            .heatmap-absent { background: #ef4444 !important; }
+            .heatmap-holiday { background: #8b5cf6 !important; }
+            .heatmap-future { background: #e5e7eb !important; }
+            
+            /* Print watermark */
+            body::after { content: 'FuturON Preschool'; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-35deg); font-size: 60pt; opacity: 0.025; color: #1e40af; pointer-events: none; z-index: 9999; font-weight: 900; letter-spacing: 0.1em; }
         }
 
         /* Mobile responsive */
@@ -542,6 +609,74 @@
 
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
         function isValidVal(v) { return v && v !== 'N/A' && v !== '-'; }
+        
+        // Sparkline SVG generator
+        function sparkline(values, color) {
+            if (!values || values.length < 2) return '';
+            const w = 52, h = 14;
+            const max = Math.max(...values, 1);
+            const pts = values.map((v, i) => `${(i / (values.length - 1)) * w},${h - (v / max) * (h - 2) - 1}`).join(' ');
+            return `<svg width="${w}" height="${h}" style="margin-top:4px; opacity:0.8;"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        }
+        
+        // Heatmap calendar generator
+        function generateHeatmap(days, allWeeks, weekIdx) {
+            if (!days.length || !days[0].date) return '';
+            // Get month from first day's date
+            const firstDate = String(days[0].date).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (!firstDate) return '';
+            const month = parseInt(firstDate[2]) - 1;
+            const year = parseInt(firstDate[3]);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const firstDayOfWeek = (new Date(year, month, 1).getDay() + 6) % 7; // Monday=0
+            
+            // Build day status map from all weeks in this month
+            const dayStatus = {};
+            allWeeks.forEach(w => {
+                const wDays = getWeekDays(w);
+                wDays.forEach(d => {
+                    if (!d.date) return;
+                    const dm = String(d.date).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                    if (!dm || parseInt(dm[2]) - 1 !== month) return;
+                    const dayNum = parseInt(dm[1]);
+                    if (isHoliday(d)) dayStatus[dayNum] = 'holiday';
+                    else if (isFutureDay(d)) dayStatus[dayNum] = 'future';
+                    else if (isAbsent(d)) dayStatus[dayNum] = 'absent';
+                    else if (hasData(d)) dayStatus[dayNum] = 'present';
+                });
+            });
+            
+            let html = '<div style="margin-top:1rem;"><div style="font-size:0.62rem; color:#94a3b8; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Monthly Attendance Map</div>';
+            html += '<div class="heatmap-grid">';
+            // Day headers
+            ['M','T','W','T','F','S','S'].forEach(d => { html += `<div class="heatmap-header">${d}</div>`; });
+            // Empty cells before first day
+            for (let i = 0; i < firstDayOfWeek; i++) html += '<div class="heatmap-cell heatmap-empty"></div>';
+            // Day cells
+            for (let d = 1; d <= daysInMonth; d++) {
+                const status = dayStatus[d] || 'future';
+                const cls = status === 'present' ? 'heatmap-present' : status === 'absent' ? 'heatmap-absent' : status === 'holiday' ? 'heatmap-holiday' : 'heatmap-future';
+                html += `<div class="heatmap-cell ${cls}" title="Day ${d}: ${status}"></div>`;
+            }
+            html += '</div>';
+            html += '<div class="heatmap-legend"><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-present"></div>Present</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-absent"></div>Absent</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-holiday"></div>Holiday</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-future"></div>Upcoming</div></div>';
+            html += '</div>';
+            // Heatmap attendance calendar
+            const weeks = studentsData[selectedStudent];
+            html += generateHeatmap(days, weeks, selectedWeekIdx);
+
+            // Formal report footer
+            const reportDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+            html += `
+                <div class="report-footer">
+                    <p class="signature-line">Prepared by: Class Teacher, ${SCHOOL.class}</p>
+                    <p>FuturON Preschool, Jammalamadugu</p>
+                    <p class="disclaimer">This is a system-generated progress report from the FuturON Student Management System. Report generated on ${reportDate}.<br>For queries, contact: futuronpreschooljammalamadugu@gmail.com</p>
+                </div>
+            `;
+
+            return html;
+        }
         function isSecondSaturday(d) {
             if (d.day !== 'SATURDAY') return false;
             if (d.arrival_time && d.arrival_time.toUpperCase().includes('SECOND SATURDAY')) return true;
@@ -694,6 +829,9 @@
                 </div>
             `;
 
+            // Formal communication header
+            html += `<div class="formal-header">Dear Parent/Guardian,<br>Please find below the weekly progress report for <strong>${studentNameFormatted}</strong>, Class <strong>${SCHOOL.class}</strong>, for the academic period <strong>${formatWeekLabel(week.label)}</strong>${week.date_range ? ' (' + week.date_range + ')' : ''}.</div>`;
+
             html += renderOverview(days, week);
             html += renderMonthlySummary();
 
@@ -837,6 +975,10 @@
             const lunchAvg = lunchDays.length ? lunchDays.reduce((s, d) => s + pct(d.lunch_completion), 0) / lunchDays.length : 0;
             const waterAvg = active.length ? active.reduce((s, d) => s + pct(d.water_completion), 0) / active.length : 0;
             const bottleTotal = active.reduce((s, d) => s + d.bottle_refill, 0);
+            // Sparkline daily values
+            const snackSpark = active.map(d => pct(d.snack_completion));
+            const lunchSpark = lunchDays.map(d => pct(d.lunch_completion));
+            const waterSpark = active.map(d => pct(d.water_completion));
             // Count holidays this week (from all days including excluded ones)
             const holidaysThisWeek = week.days.filter(d => isHoliday(d)).length;
             const holidayNames = week.days.filter(d => isHoliday(d)).map(d => isSecondSaturday(d) ? '2nd Saturday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() || 'Holiday').join(', ');
@@ -866,15 +1008,15 @@
                 <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-                        <div class="kpi-label">Morning Snack</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div><div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week</div>
+                        <div class="kpi-label">Morning Snack</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div><div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week${sparkline(snackSpark, '#a78bfa')}</div>
                     </div>
                     <div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
-                        <div class="kpi-label">Afternoon Meal</div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div><div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week</div>
+                        <div class="kpi-label">Afternoon Meal</div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div><div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week${sparkline(lunchSpark, '#34d399')}</div>
                     </div>
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
-                        <div class="kpi-label">Hydration Level</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div><div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})</div>
+                        <div class="kpi-label">Hydration Level</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div><div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
                     </div>
                     <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
                         <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
