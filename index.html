@@ -473,7 +473,8 @@
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
         function isValidVal(v) { return v && v !== 'N/A' && v !== '-'; }
         function hasData(d) {
-            // School day if ANY field has data (including '-' which means absent but tracked)
+            // School day if it has a date (sheet tracked this day) OR any field has data
+            if (d.date && d.date !== '' && d.date !== 'N/A') return true;
             if (d.arrival_time && d.arrival_time !== 'N/A') return true;
             if (d.snacks && d.snacks !== 'N/A') return true;
             if (d.lunch && d.lunch !== 'N/A') return true;
