@@ -1356,11 +1356,17 @@
         }
 
         function downloadPDF() {
-            // Ensure content is fully visible before printing
+            // Force render actual content (bypass skeleton transition) then print
             const main = document.getElementById('main');
+            renderSidebar();
+            renderMain();
             main.style.opacity = '1';
             main.style.transform = 'none';
-            setTimeout(() => { window.print(); }, 100);
+            main.style.transition = 'none';
+            setTimeout(() => {
+                window.print();
+                main.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            }, 200);
         }
 
         function selectStudent(s) { selectedStudent = s; selectedWeekIdx = studentsData[s].length - 1; render(); }
