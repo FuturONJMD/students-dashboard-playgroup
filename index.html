@@ -1281,7 +1281,7 @@
             }
 
             html += `<div class="section-header">DAILY PROGRESS REPORT</div>`;
-            html += `<div style="display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap:10px; padding:0.6rem 0; border-bottom:1px solid #334155; margin-bottom:0.4rem;">
+            html += `<div class="daily-grid-header">
                 <span style="font-size:0.62rem; color:#93c5fd; font-weight:600;">DAY / DATE / CHECK-IN</span>
                 <span style="font-size:0.62rem; color:#c4b5fd; font-weight:600;">MORNING SNACK / INTAKE</span>
                 <span style="font-size:0.62rem; color:#6ee7b7; font-weight:600;">AFTERNOON MEAL / INTAKE</span>
@@ -1298,15 +1298,15 @@
 
                 const dayDate = getDayDate(d);
                 if (isHoliday(d)) {
-                    html += `<div style="display:grid; grid-template-columns:1.2fr 5fr 1fr; gap:8px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
+                    html += `<div class="daily-grid">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div></div>
-                        <div style="color:#a78bfa; font-style:italic; font-size:0.8rem;">${isSecondSaturday(d) ? '2nd Saturday — Institutional Holiday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() ? (d.arrival_time || '').replace(/HOLIDAY/i, '').trim() + ' — School Holiday' : 'School Holiday'}</div>
-                        <div><span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">HOLIDAY</span></div>
+                        <div style="grid-column:2/5; color:#a78bfa; font-style:italic; font-size:0.8rem;">${isSecondSaturday(d) ? '2nd Saturday — Institutional Holiday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() ? (d.arrival_time || '').replace(/HOLIDAY/i, '').trim() + ' — School Holiday' : 'School Holiday'}</div>
+                        <div style="grid-column:5/7; text-align:center;"><span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">HOLIDAY</span></div>
                     </div>`;
                     return;
                 }
                 if (isAbsent(d)) {
-                    html += `<div style="display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap:10px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center; opacity:0.7;">
+                    html += `<div class="daily-grid" style="opacity:0.7;">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time" style="color:#f43f5e;">ABSENT</div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
@@ -1319,7 +1319,7 @@
                 const sp = pct(d.snack_completion), lp = pct(d.lunch_completion), wp = pct(d.water_completion);
                 const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? '<span class="badge badge-green">Uniform</span>' : String(d.uniform || '').toUpperCase() === 'NO' ? '<span class="badge badge-yellow">No</span>' : String(d.uniform || '').toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
                 html += `
-                    <div style="display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap:10px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
+                    <div class="daily-grid">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
                         <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% completed</div></div>
                         <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% completed</div></div>
