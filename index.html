@@ -325,7 +325,7 @@
         .snap-day { font-size: 0.78rem; font-weight: 600; color: #60a5fa; text-transform: uppercase; }
         .snap-time { font-size: 0.68rem; color: #94a3b8; font-weight: 500; }
         .snap-label { font-size: 0.62rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
-        .snap-value { font-size: 0.78rem; color: #e2e8f0; margin: 0.1rem 0; font-weight: 500; }
+        .snap-value { font-size: 0.72rem; color: #e2e8f0; margin: 0.1rem 0; font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
         .snap-bar { height: 3px; border-radius: 2px; background: #334155; overflow: hidden; margin-top: 4px; }
         .snap-bar-fill { height: 100%; border-radius: 2px; }
         
@@ -1266,7 +1266,7 @@
             }
 
             html += `<div class="section-header">DAILY PROGRESS REPORT</div>`;
-            html += `<div style="display:grid; grid-template-columns:0.9fr 1.4fr 1.4fr 2fr 0.6fr 0.6fr; gap:18px; padding:0.6rem 0; border-bottom:1px solid #334155; margin-bottom:0.4rem;">
+            html += `<div style="display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap:10px; padding:0.6rem 0; border-bottom:1px solid #334155; margin-bottom:0.4rem;">
                 <span style="font-size:0.62rem; color:#93c5fd; font-weight:600;">DAY / DATE / CHECK-IN</span>
                 <span style="font-size:0.62rem; color:#c4b5fd; font-weight:600;">MORNING SNACK / INTAKE</span>
                 <span style="font-size:0.62rem; color:#6ee7b7; font-weight:600;">AFTERNOON MEAL / INTAKE</span>
@@ -1291,7 +1291,7 @@
                     return;
                 }
                 if (isAbsent(d)) {
-                    html += `<div style="display:grid; grid-template-columns:0.9fr 1.4fr 1.4fr 2fr 0.6fr 0.6fr; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center; opacity:0.7;">
+                    html += `<div style="display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap:10px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center; opacity:0.7;">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time" style="color:#f43f5e;">ABSENT</div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
                         <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
@@ -1304,7 +1304,7 @@
                 const sp = pct(d.snack_completion), lp = pct(d.lunch_completion), wp = pct(d.water_completion);
                 const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? '<span class="badge badge-green">Uniform</span>' : String(d.uniform || '').toUpperCase() === 'NO' ? '<span class="badge badge-yellow">No</span>' : String(d.uniform || '').toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
                 html += `
-                    <div style="display:grid; grid-template-columns:0.9fr 1.4fr 1.4fr 2fr 0.6fr 0.6fr; gap:18px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
+                    <div style="display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap:10px; padding:0.7rem 0; border-bottom:1px solid rgba(51,65,85,0.4); align-items:center;">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
                         <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% completed</div></div>
                         <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% completed</div></div>
