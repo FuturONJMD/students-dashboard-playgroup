@@ -188,7 +188,7 @@
             height: 100vh;
             overflow-y: auto;
         }
-        .main { margin-left: 260px; flex: 1; padding: 2rem 2.5rem; max-width: 1200px; }
+        .main { margin-left: 260px; flex: 1; padding: 2rem 2.5rem 5rem; max-width: 1200px; }
         
         /* Sidebar */
         .logo { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #334155; }
@@ -374,8 +374,8 @@
         .footer p { color: #475569; font-size: 0.72rem; font-weight: 400; }
         
         /* PDF Download button */
-        .pdf-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; border: none; padding: 0.8rem 1.4rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(59,130,246,0.35); z-index: 1000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit; }
-        .pdf-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 28px rgba(59,130,246,0.45); }
+        .pdf-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; border: none; padding: 0.7rem 1.2rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 20px rgba(59,130,246,0.35); z-index: 1000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit; opacity: 0.9; }
+        .pdf-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 28px rgba(59,130,246,0.45); opacity: 1; }
         .pdf-btn svg { flex-shrink: 0; }
 
         /* Print / PDF styles - optimized for readability */
@@ -755,10 +755,11 @@
         // Sparkline SVG generator
         function sparkline(values, color) {
             if (!values || values.length < 2) return '';
-            const w = 52, h = 14;
+            const w = 80, h = 24;
             const max = Math.max(...values, 1);
-            const pts = values.map((v, i) => `${(i / (values.length - 1)) * w},${h - (v / max) * (h - 2) - 1}`).join(' ');
-            return `<svg width="${w}" height="${h}" style="margin-top:4px; opacity:0.8;"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            const pts = values.map((v, i) => `${(i / (values.length - 1)) * w},${h - (v / max) * (h - 4) - 2}`).join(' ');
+            const fillPts = `0,${h} ${pts} ${w},${h}`;
+            return `<svg width="${w}" height="${h}" style="display:block; margin-top:6px;" aria-hidden="true"><polygon points="${fillPts}" fill="${color}" fill-opacity="0.15"/><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
         }
         
         // Heatmap calendar generator
