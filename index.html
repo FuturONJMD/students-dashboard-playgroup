@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#0f172a">
     <meta name="description" content="FuturON Preschool - Student Daily Updates Dashboard">
     <meta name="format-detection" content="telephone=yes">
-    <link rel="apple-touch-icon" href="images/school-logo.jpg">
+    <link rel="apple-touch-icon" href="images/fps-tree-logo.jpg">
     <link rel="manifest" href="manifest.json">
     <title>FuturON Preschool - Student Progress Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -845,7 +845,7 @@
             const weeks = studentsData[selectedStudent];
             let html = `
                 <div class="logo">
-                    <img src="images/school-logo.jpg" alt="FuturON" class="logo-icon">
+                    <img src="images/fps-tree-logo.jpg" alt="FuturON" class="logo-icon">
                     <div><div class="logo-text">FuturON Preschool</div><div class="logo-sub">Creating Future CEOs</div><div class="logo-sub">${isParentView ? 'Parent Portal' : 'Student Dashboard'}</div></div>
                 </div>
             `;
@@ -893,7 +893,7 @@
                 <div class="school-banner" style="flex-direction:column; align-items:stretch; gap:0;">
                     <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:12px; border-bottom:1px solid rgba(51,65,85,0.5); margin-bottom:12px; position:relative; z-index:1;">
                         <div style="display:flex; align-items:center; gap:14px;">
-                            <img src="images/school-logo.jpg?v=2" alt="FuturON" class="school-logo">
+                            <img src="images/fps-tree-logo.jpg" alt="FuturON" class="school-logo">
                             <div>
                                 <div class="school-name">FuturON Preschool Jammalamadugu</div>
                                 <div class="school-address">Near SBI Bank, Tadipatri Road, Jammalamadugu Town, Kadapa District, AP - 516434 <a href="https://www.google.com/maps/dir//FuturON+Preschool+Jammalamadugu,+Tadipatri+Road,+Jammalamadugu,+Andhra+Pradesh+516434/@14.8470507,78.3837277,17z" target="_blank" style="display:inline-flex;align-items:center;gap:3px;color:#f59e0b;text-decoration:none;font-weight:600;font-size:0.62rem;margin-left:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Directions</a></div>
@@ -1427,7 +1427,7 @@
         }
         function renderApp() {
             if (Object.keys(studentsData).length === 0) {
-                document.getElementById('main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;"><div style="text-align:center;"><img src="images/school-logo.jpg" style="width:80px;height:80px;border-radius:14px;margin-bottom:1.2rem;box-shadow:0 4px 16px rgba(0,0,0,0.3);"><div style="font-size:1.3rem;font-weight:700;color:#f8fafc;margin-bottom:0.5rem;">Welcome to FuturON Preschool Jammalamadugu</div><div style="color:#64748b;font-size:0.82rem;">Unable to load. Please check your internet and refresh.</div></div></div>';
+                document.getElementById('main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;"><div style="text-align:center;"><img src="images/fps-tree-logo.jpg" style="width:80px;height:80px;border-radius:14px;margin-bottom:1.2rem;box-shadow:0 4px 16px rgba(0,0,0,0.3);"><div style="font-size:1.3rem;font-weight:700;color:#f8fafc;margin-bottom:0.5rem;">Welcome to FuturON Preschool Jammalamadugu</div><div style="color:#64748b;font-size:0.82rem;">Unable to load. Please check your internet and refresh.</div></div></div>';
                 return;
             }
             isParentView = parentMode && studentsData[parentMode.toUpperCase()];
@@ -1439,7 +1439,7 @@
         // Show loading state, then fetch live data
         document.getElementById('main').innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:80vh;">
             <div style="text-align:center;animation:fadeIn 0.6s ease;">
-                <img src="images/school-logo.jpg" style="width:100px;height:100px;border-radius:20px;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(59,130,246,0.3);animation:logoFloat 2s ease-in-out infinite;">
+                <img src="images/fps-tree-logo.jpg" style="width:100px;height:100px;border-radius:20px;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(59,130,246,0.3);animation:logoFloat 2s ease-in-out infinite;">
                 <div style="font-size:0.85rem;color:#60a5fa;font-weight:600;margin-bottom:2rem;letter-spacing:2px;">Creating Future CEOs</div>
                 <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:0.8rem;">
                     <span style="width:8px;height:8px;background:#3b82f6;border-radius:50%;display:inline-block;animation:bounceDot 1.4s infinite ease-in-out;animation-delay:0s;"></span>
