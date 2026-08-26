@@ -66,7 +66,7 @@
             --bg-sidebar: rgba(15,23,42,0.92);
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --text-muted: #78859b;
             --border-subtle: rgba(51,65,85,0.5);
             --border-card: rgba(100,116,139,0.15);
             --card-shadow: var(--md-elevation-1);
@@ -273,9 +273,10 @@
         .logo-sub { color: #64748b; font-size: 0.68rem; margin-top: 2px; font-weight: 400; letter-spacing: 0.01em; }
         
         .nav-category { font-size: 0.62rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.08em; margin: 1.8rem 0 0.6rem; font-weight: 600; }
-        .nav-item { padding: 0.55rem 0.9rem; border-radius: var(--md-shape-sm); cursor: pointer; font-size: 0.8rem; color: #94a3b8; margin-bottom: 3px; transition: all var(--md-duration-short) var(--md-motion-standard); font-weight: 450; }
+        .nav-item { padding: 0.55rem 0.9rem; border-radius: var(--md-shape-sm); cursor: pointer; font-size: 0.8rem; color: #94a3b8; margin-bottom: 3px; transition: all var(--md-duration-short) var(--md-motion-standard); font-weight: 450; position: relative; }
         .nav-item:hover { background: rgba(51,65,85,0.5); color: #f1f5f9; }
-        .nav-item.active { background: linear-gradient(135deg, #1e40af, #2563eb); color: #ffffff; font-weight: 500; box-shadow: 0 2px 8px rgba(59,130,246,0.3); }
+        .nav-item.active { background: rgba(59,130,246,0.08); color: #93c5fd; font-weight: 500; box-shadow: none; }
+        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; border-radius: 0 3px 3px 0; background: #3b82f6; }
         
         /* Header - School Banner */
         .school-banner {
@@ -348,7 +349,7 @@
         .health-card { text-align: center; padding: 1.2rem 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(51,65,85,0.5); border-radius: var(--md-shape-lg); min-width: 120px; box-shadow: var(--md-elevation-1), inset 0 1px 0 rgba(255,255,255,0.05); transition: all var(--md-duration-short) var(--md-motion-standard); }
         .health-card:hover { transform: translateY(-3px); box-shadow: var(--md-elevation-3), 0 0 24px rgba(16,185,129,0.12); }
         .health-value { font-size: 2.4rem; font-weight: 700; color: #10b981; text-shadow: 0 0 16px rgba(16,185,129,0.2); }
-        .health-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; margin-top: 0.3rem; font-weight: 500; letter-spacing: 0.04em; }
+        .health-label { font-size: 0.65rem; color: #78859b; text-transform: uppercase; margin-top: 0.3rem; font-weight: 500; letter-spacing: 0.04em; }
         .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: var(--md-shape-xs); font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.4rem; }
         .badge-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
         .badge-yellow { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
@@ -408,7 +409,7 @@
         .snapshot-row { display: grid; grid-template-columns: 1.2fr 2fr 2fr 2fr 1fr; gap: 12px; padding: 0.8rem 0; border-bottom: 1px solid rgba(51,65,85,0.25); align-items: center; }
         .snap-day { font-size: 0.75rem; font-weight: 600; color: #60a5fa; text-transform: uppercase; }
         .snap-time { font-size: 0.65rem; color: #94a3b8; font-weight: 400; }
-        .snap-label { font-size: 0.6rem; color: #64748b; text-transform: uppercase; font-weight: 500; letter-spacing: 0.02em; }
+        .snap-label { font-size: 0.6rem; color: #78859b; text-transform: uppercase; font-weight: 500; letter-spacing: 0.02em; }
         .snap-value { font-size: 0.7rem; color: #e2e8f0; margin: 0.1rem 0; font-weight: 450; overflow: hidden; text-overflow: ellipsis; }
         .snap-bar { height: 3px; border-radius: 2px; background: #334155; overflow: hidden; margin-top: 4px; }
         .snap-bar-fill { height: 100%; border-radius: 2px; }
@@ -574,6 +575,8 @@
             
             /* Print watermark */
             body::after { content: 'FuturON Preschool'; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-35deg); font-size: 60pt; opacity: 0.025; color: #1e40af; pointer-events: none; z-index: 9999; font-weight: 900; letter-spacing: 0.1em; }
+            /* Print page numbers */
+            @page { margin: 1.5cm; @bottom-center { content: 'Page ' counter(page) ' of ' counter(pages); font-size: 8pt; color: #6b7280; } }
         }
 
         
@@ -590,6 +593,14 @@
         .data-freshness-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
         body.theme-light .data-freshness { background: rgba(241,245,249,0.8); border-color: rgba(203,213,225,0.5); color: #475569; }
 
+        /* Sticky mini-header on scroll */
+        .sticky-header { position: fixed; top: 0; left: 250px; right: 0; height: 44px; background: var(--bg-sidebar); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--md-outline-variant); display: flex; align-items: center; padding: 0 1.5rem; z-index: 100; transform: translateY(-100%); transition: transform var(--md-duration-short) var(--md-motion-standard); }
+        .sticky-header.visible { transform: translateY(0); }
+        .sticky-header-name { font-size: 0.78rem; font-weight: 600; color: var(--text-primary); }
+        .sticky-header-meta { font-size: 0.65rem; color: var(--text-secondary); margin-left: auto; }
+        @media (max-width: 768px) { .sticky-header { left: 0; } }
+        @media print { .sticky-header { display: none !important; } }
+
         
         /* Smart Parent UX: Quick Summary Card */
         .quick-summary { background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08)); border: 1px solid rgba(16,185,129,0.2); border-radius: var(--md-shape-lg); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; animation: fadeInUp 0.4s var(--md-motion-emphasized-decelerate); box-shadow: var(--md-elevation-1), inset 0 1px 0 rgba(255,255,255,0.05); }
@@ -603,7 +614,7 @@
         .dot-green { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.5); }
         .dot-yellow { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.5); }
         .dot-red { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
-        .quick-summary-label { font-size: 0.62rem; color: #64748b; text-transform: uppercase; font-weight: 500; letter-spacing: 0.02em; }
+        .quick-summary-label { font-size: 0.62rem; color: #78859b; text-transform: uppercase; font-weight: 500; letter-spacing: 0.02em; }
         .quick-summary-value { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; margin-top: 2px; }
         .quick-summary-tip { font-size: 0.75rem; color: #94a3b8; padding-top: 0.6rem; border-top: 1px solid rgba(51,65,85,0.4); font-style: italic; }
 
@@ -691,8 +702,9 @@
         body.theme-light .profile-name { color: var(--md-on-surface); }
         body.theme-light .profile-class { color: var(--md-primary); }
         body.theme-light .nav-item { color: var(--md-on-surface-variant); }
-        body.theme-light .nav-item:hover { background: #e2e8f0; color: #0f172a; }
-        body.theme-light .nav-item.active { background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.25); }
+        body.theme-light .nav-item:hover { background: rgba(59,130,246,0.06); color: #0f172a; }
+        body.theme-light .nav-item.active { background: rgba(59,130,246,0.08); color: #1d4ed8; }
+        body.theme-light .nav-item.active::before { background: #1d4ed8; }
         body.theme-light .logo-text { color: var(--md-on-surface); }
         body.theme-light .logo-sub { color: var(--md-on-surface-variant); }
         body.theme-light .nav-category { color: var(--md-primary); }
@@ -780,6 +792,10 @@
     <a href="#main" class="skip-link" style="position:absolute;top:-40px;left:0;background:#60a5fa;color:#fff;padding:8px 16px;z-index:10000;font-size:0.85rem;transition:top 0.2s;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Skip to content</a>
     <div class="app">
         <aside class="sidebar" aria-label="Navigation sidebar" id="sidebar"></aside>
+        <div class="sticky-header" id="sticky-header">
+            <span class="sticky-header-name" id="sticky-name"></span>
+            <span class="sticky-header-meta" id="sticky-meta"></span>
+        </div>
         <main class="main" id="main" aria-live="polite" style="transition: opacity 0.2s ease, transform 0.2s ease;"></main>
     </div>
     <!-- Theme Toggle -->
@@ -1000,6 +1016,8 @@
             const p = Math.min(100, Math.max(0, pct));
             return `<div style="width:100%;height:3px;border-radius:2px;background:rgba(100,116,139,0.15);margin-top:6px;overflow:hidden;"><div class="snap-bar-fill" style="width:${p}%;height:100%;border-radius:2px;background:${color};"></div></div>`;
         }
+        // Format percentage with one decimal
+        function pct1(val) { return (Math.round(val * 10) / 10).toFixed(1); }
         
         // Heatmap calendar generator
         function generateHeatmap(days, allWeeks, weekIdx) {
@@ -1433,15 +1451,15 @@
                 <div class="kpi-grid">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-                        <div class="kpi-label">Morning Snack<span class="help-tip" data-tip="Percentage of morning snack your child finished at school">?</span></div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div>${miniBar(snackAvg, '#a78bfa')}${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
+                        <div class="kpi-label">Morning Snack<span class="help-tip" data-tip="Percentage of morning snack your child finished at school">?</span></div><div class="kpi-value accent-purple">${pct1(snackAvg)}%</div>${miniBar(snackAvg, '#a78bfa')}${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${pct1(snackAvg)}% this week ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
                     </div>
                     <div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
-                        <div class="kpi-label">Afternoon Meal<span class="help-tip" data-tip="How much of the lunch box your child completed">?</span></div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div>${miniBar(lunchAvg, '#34d399')}${deltaHtml(lunchDelta)}<div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week ${getStatusText(lunchAvg)}${sparkline(lunchSpark, '#34d399')}</div>
+                        <div class="kpi-label">Afternoon Meal<span class="help-tip" data-tip="How much of the lunch box your child completed">?</span></div><div class="kpi-value accent-green">${pct1(lunchAvg)}%</div>${miniBar(lunchAvg, '#34d399')}${deltaHtml(lunchDelta)}<div class="kpi-sublabel">Afternoon meal intake rate: ${pct1(lunchAvg)}% this week ${getStatusText(lunchAvg)}${sparkline(lunchSpark, '#34d399')}</div>
                     </div>
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
-                        <div class="kpi-label">Hydration Level<span class="help-tip" data-tip="How well your child drinks water at school vs WHO recommended intake">?</span></div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div>${miniBar(waterAvg, '#60a5fa')}${deltaHtml(waterDelta)}<div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
+                        <div class="kpi-label">Hydration Level<span class="help-tip" data-tip="How well your child drinks water at school vs WHO recommended intake">?</span></div><div class="kpi-value accent-blue">${pct1(waterAvg)}%</div>${miniBar(waterAvg, '#60a5fa')}${deltaHtml(waterDelta)}<div class="kpi-sublabel">Water intake rate: ${pct1(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
                     </div>
                     <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
                         <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
@@ -1677,6 +1695,8 @@
         function selectStudent(s) {
             const main = document.getElementById('main');
             main.style.opacity = '0'; main.style.transform = 'translateY(6px)';
+            // Reset section collapse states for new student
+            ['sec-nourishment','sec-daily','sec-attendance'].forEach(id => localStorage.removeItem('section_' + id));
             setTimeout(() => { selectedStudent = s; selectedWeekIdx = studentsData[s].length - 1; render(); main.style.opacity = '1'; main.style.transform = 'translateY(0)'; }, 150);
         }
         function selectWeek(i) {
@@ -1687,6 +1707,11 @@
 
         function render() {
             const main = document.getElementById('main');
+            // Update sticky header
+            const sn = document.getElementById('sticky-name');
+            const sm = document.getElementById('sticky-meta');
+            if (sn) sn.textContent = selectedStudent ? selectedStudent.charAt(0) + selectedStudent.slice(1).toLowerCase() : '';
+            if (sm) sm.textContent = SCHOOL.class;
             main.style.opacity = '0';
             main.style.transform = 'translateY(6px)';
             // Show skeleton briefly
@@ -1717,20 +1742,22 @@
         }
 
         // Show loading state, then fetch live data
-        document.getElementById('main').innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:80vh;">
-            <div style="text-align:center;animation:fadeIn 0.6s ease;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 16px;display:block;animation:pulse 1.5s infinite;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <div style="font-size:1rem;font-weight:600;color:#f8fafc;margin-bottom:6px;">Loading student data...</div>
-                <div style="font-size:0.75rem;color:#64748b;">Connecting to school records</div>
-                <div style="font-size:0.85rem;color:#60a5fa;font-weight:600;margin-bottom:2rem;letter-spacing:2px;">Creating Future CEOs</div>
-                <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:0.8rem;">
-                    <span style="width:8px;height:8px;background:#3b82f6;border-radius:50%;display:inline-block;animation:bounceDot 1.4s infinite ease-in-out;animation-delay:0s;"></span>
-                    <span style="width:8px;height:8px;background:#60a5fa;border-radius:50%;display:inline-block;animation:bounceDot 1.4s infinite ease-in-out;animation-delay:0.2s;"></span>
-                    <span style="width:8px;height:8px;background:#93c5fd;border-radius:50%;display:inline-block;animation:bounceDot 1.4s infinite ease-in-out;animation-delay:0.4s;"></span>
-                </div>
+        document.getElementById('main').innerHTML = `<div style="padding:2rem;animation:fadeIn 0.4s ease;">
+            <div class="skeleton-card" style="margin-bottom:1.5rem;"><div class="skeleton-circle"></div><div class="skeleton-line" style="width:60%;"></div><div class="skeleton-line" style="width:40%;"></div></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
+                <div class="skeleton-card"><div class="skeleton-line" style="width:50%;height:8px;"></div><div class="skeleton-line" style="width:70%;height:20px;margin:12px auto 8px;"></div><div class="skeleton-line" style="width:80%;height:6px;"></div></div>
+                <div class="skeleton-card"><div class="skeleton-line" style="width:50%;height:8px;"></div><div class="skeleton-line" style="width:70%;height:20px;margin:12px auto 8px;"></div><div class="skeleton-line" style="width:80%;height:6px;"></div></div>
+                <div class="skeleton-card"><div class="skeleton-line" style="width:50%;height:8px;"></div><div class="skeleton-line" style="width:70%;height:20px;margin:12px auto 8px;"></div><div class="skeleton-line" style="width:80%;height:6px;"></div></div>
+                <div class="skeleton-card"><div class="skeleton-line" style="width:50%;height:8px;"></div><div class="skeleton-line" style="width:70%;height:20px;margin:12px auto 8px;"></div><div class="skeleton-line" style="width:80%;height:6px;"></div></div>
             </div>
+            <div class="skeleton-card" style="height:200px;"><div class="skeleton-line" style="width:30%;margin-bottom:16px;"></div><div class="skeleton-line" style="width:100%;"></div><div class="skeleton-line" style="width:90%;"></div><div class="skeleton-line" style="width:95%;"></div><div class="skeleton-line" style="width:85%;"></div></div>
         </div>`;
         loadData();
+        // Scroll-linked sticky header
+        window.addEventListener('scroll', () => {
+            const sh = document.getElementById('sticky-header');
+            if (sh) sh.classList.toggle('visible', window.scrollY > 180);
+        }, { passive: true });
     </script>
 </body>
 </html>
