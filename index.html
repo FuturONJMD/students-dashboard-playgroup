@@ -845,9 +845,12 @@
         function setViewMode(mode) {
             localStorage.setItem('viewMode', mode);
             document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`[data-view="${mode}"]`).classList.add('active');
-            const detailedSections = document.querySelectorAll('.detailed-only');
-            detailedSections.forEach(el => {
+            const activeBtn = document.querySelector(`[data-view="${mode}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            document.querySelectorAll('.detailed-only').forEach(el => {
+                el.style.display = mode === 'summary' ? 'none' : '';
+            });
+            document.querySelectorAll('.ai-card').forEach(el => {
                 el.style.display = mode === 'summary' ? 'none' : '';
             });
         }
@@ -857,7 +860,7 @@
         }
         // Restore view mode on load
         function restoreViewMode() {
-            const mode = localStorage.getItem('viewMode') || 'summary';
+            const mode = localStorage.getItem('viewMode') || 'detailed';
             setViewMode(mode);
         }
 
