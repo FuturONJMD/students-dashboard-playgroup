@@ -415,10 +415,10 @@
         .snap-bar-fill { height: 100%; border-radius: 2px; }
         
         /* View tabs */
-        .tabs { display: inline-flex; gap: 3px; margin-bottom: 1.5rem; background: #1e293b; border: 1px solid #334155; border-radius: var(--md-shape-sm); padding: 4px; }
-        .tab { padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.78rem; cursor: pointer; color: #94a3b8; transition: all var(--md-duration-short) var(--md-motion-standard); font-weight: 500; }
-        .tab.active { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.3); }
-        .tab:hover:not(.active) { color: #f1f5f9; background: rgba(51,65,85,0.6); }
+        .tabs { display: inline-flex; gap: 3px; margin-bottom: 1.5rem; background: rgba(30,41,59,0.6); border: 1px solid rgba(51,65,85,0.4); border-radius: 20px; padding: 3px; }
+        .tab { padding: 6px 14px; border-radius: 18px; font-size: 0.72rem; cursor: pointer; color: #94a3b8; transition: all var(--md-duration-short) var(--md-motion-standard); font-weight: 500; position: relative; }
+        .tab.active { background: rgba(59,130,246,0.12); color: #93c5fd; font-weight: 600; }
+        .tab:hover:not(.active) { color: #e2e8f0; background: rgba(51,65,85,0.4); }
         
         /* AI Insights */
         .ai-card { background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-card); border-radius: var(--md-shape-md); padding: 1.2rem 1.4rem; margin-bottom: 1rem; box-shadow: none; transition: all var(--md-duration-short) var(--md-motion-standard); animation: fadeInUp 0.5s var(--md-motion-emphasized-decelerate); }
@@ -618,17 +618,21 @@
         .quick-summary-value { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; margin-top: 2px; }
         .quick-summary-tip { font-size: 0.75rem; color: #94a3b8; padding-top: 0.6rem; border-top: 1px solid rgba(51,65,85,0.4); font-style: italic; }
 
-        /* Collapsible Sections */
+        /* Collapsible Sections - Professional Chevron */
         .section-toggle { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px; }
-        .section-toggle::before { content: "\25BC"; font-size: 0.6rem; color: var(--md-primary); transition: transform var(--md-duration-medium) var(--md-motion-standard); display: inline-block; }
-        .section-toggle.collapsed::before { transform: rotate(-90deg); }
+        .section-toggle::after { content: ''; width: 16px; height: 16px; border-radius: 50%; background: rgba(59,130,246,0.08); display: inline-flex; align-items: center; justify-content: center; margin-left: auto; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; transition: transform var(--md-duration-medium) var(--md-motion-standard); }
+        .section-toggle::before { display: none; }
+        .section-toggle.collapsed::after { transform: rotate(-90deg); }
         .section-content { max-height: 5000px; overflow: hidden; transition: max-height var(--md-duration-long) var(--md-motion-emphasized), opacity var(--md-duration-medium) var(--md-motion-standard); opacity: 1; }
         .section-content.hidden { max-height: 0; opacity: 0; margin: 0; padding: 0; }
 
         /* View Mode Toggle */
-        .view-toggle { display: flex; background: rgba(30,41,59,0.8); border-radius: var(--md-shape-sm); padding: 4px; border: 1px solid rgba(51,65,85,0.5); margin-bottom: 1.2rem; width: fit-content; }
-        .view-toggle-btn { padding: 6px 16px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all var(--md-duration-short) var(--md-motion-standard); color: #94a3b8; border: none; background: transparent; font-family: inherit; }
-        .view-toggle-btn.active { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.3); }
+        /* View Mode Toggle - MD3 Segmented Button */
+        .view-toggle { display: inline-flex; background: rgba(30,41,59,0.6); border-radius: 20px; padding: 3px; border: 1px solid rgba(51,65,85,0.4); margin-bottom: 1.2rem; position: relative; }
+        .view-toggle-btn { padding: 7px 20px; border-radius: 18px; font-size: 0.72rem; font-weight: 500; cursor: pointer; transition: all var(--md-duration-short) var(--md-motion-standard); color: #94a3b8; border: none; background: transparent; font-family: inherit; position: relative; z-index: 1; }
+        .view-toggle-btn.active { color: #fff; font-weight: 600; }
+        .view-toggle-btn.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #1e40af, #2563eb); border-radius: 18px; z-index: -1; box-shadow: 0 2px 8px rgba(59,130,246,0.25); }
+        .view-toggle-btn:not(.active):hover { color: #e2e8f0; background: rgba(51,65,85,0.4); }
 
         /* Expandable Rows */
         .expand-btn { cursor: pointer; font-size: 0.7rem; color: #60a5fa; font-weight: 600; padding: 2px 8px; border-radius: 4px; transition: background 0.2s; }
@@ -651,9 +655,11 @@
         body.theme-light .quick-summary-title { color: var(--md-on-surface); }
         body.theme-light .quick-summary-value { color: var(--md-on-surface); }
         body.theme-light .quick-summary-tip { color: var(--md-on-surface-variant); border-color: var(--md-outline-variant); }
-        body.theme-light .view-toggle { background: var(--md-surface-container-low); border-color: var(--md-outline-variant); }
-        body.theme-light .view-toggle-btn { color: var(--md-on-surface-variant); }
-        body.theme-light .section-toggle::before { color: var(--md-primary); }
+        body.theme-light .view-toggle { background: rgba(241,245,249,0.9); border-color: rgba(203,213,225,0.5); }
+        body.theme-light .view-toggle-btn { color: #475569; }
+        body.theme-light .view-toggle-btn:not(.active):hover { color: #0f172a; background: rgba(203,213,225,0.4); }
+        body.theme-light .view-toggle-btn.active::before { background: linear-gradient(135deg, #1d4ed8, #2563eb); }
+        body.theme-light .section-toggle::after { background-color: rgba(29,78,216,0.06); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); }
         body.theme-light .help-tip:hover::after { background: var(--md-surface-container-lowest); color: var(--md-on-surface-variant); box-shadow: var(--md-elevation-2); }
 
         @media (max-width: 768px) {
