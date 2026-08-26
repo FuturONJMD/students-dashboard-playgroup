@@ -246,7 +246,7 @@ const AIEngine = {
         const name = studentName.charAt(0) + studentName.slice(1).toLowerCase();
 
         if (!active.length) {
-            tips.push({ icon: '⚠️', text: `${name} was not present this week. Each school day encompasses structured learning modules, 3L skill development, co-curricular activities, dramatic arts, and interactive sessions. We look forward to welcoming ${name} back.`, severity: 'critical' });
+            tips.push({ icon: icon('alert'), text: `${name} was not present this week. Each school day encompasses structured learning modules, 3L skill development, co-curricular activities, dramatic arts, and interactive sessions. We look forward to welcoming ${name} back.`, severity: 'critical' });
             return tips;
         }
 
@@ -274,38 +274,38 @@ const AIEngine = {
 
         // Consistency score insight
         const consistency = this.calculateConsistencyScore(studentName, weekIdx);
-        tips.push({ icon: '📊', text: `${name}'s weekly consistency index: ${consistency.score}/100 (Grade: ${consistency.grade}). ${consistency.score >= 80 ? 'Demonstrating excellent daily routine adherence.' : consistency.score >= 60 ? 'Maintaining good routine with scope for improvement.' : 'Minor adjustments in daily routine at home can yield significant progress.'}`, severity: consistency.score >= 80 ? 'positive' : consistency.score >= 60 ? 'info' : 'warning' });
+        tips.push({ icon: icon('barChart'), text: `${name}'s weekly consistency index: ${consistency.score}/100 (Grade: ${consistency.grade}). ${consistency.score >= 80 ? 'Demonstrating excellent daily routine adherence.' : consistency.score >= 60 ? 'Maintaining good routine with scope for improvement.' : 'Minor adjustments in daily routine at home can yield significant progress.'}`, severity: consistency.score >= 80 ? 'positive' : consistency.score >= 60 ? 'info' : 'warning' });
 
         // Snack tips
-        if (snackAvg >= 90) tips.push({ icon: '⭐', text: `${name} demonstrates excellent morning snack consumption (${snackAvg}%). Kindly continue with similar food items.`, severity: 'positive' });
-        else if (snackAvg >= 70) tips.push({ icon: '🍎', text: `${name} consumed ${snackAvg}% of morning snacks. Incorporating preferred fruits may further improve intake.`, severity: 'info' });
-        else if (snackAvg >= 50) tips.push({ icon: '🍎', text: `${name} consumed only ${snackAvg}% of morning snacks. Smaller portions or varied items are recommended.`, severity: 'warning' });
-        else tips.push({ icon: '🍎', text: `${name}'s morning snack intake is below expected levels (${snackAvg}%). Kindly explore preferred food options or adjust portion size.`, severity: 'critical' });
+        if (snackAvg >= 90) tips.push({ icon: icon('star'), text: `${name} demonstrates excellent morning snack consumption (${snackAvg}%). Kindly continue with similar food items.`, severity: 'positive' });
+        else if (snackAvg >= 70) tips.push({ icon: icon('apple'), text: `${name} consumed ${snackAvg}% of morning snacks. Incorporating preferred fruits may further improve intake.`, severity: 'info' });
+        else if (snackAvg >= 50) tips.push({ icon: icon('apple'), text: `${name} consumed only ${snackAvg}% of morning snacks. Smaller portions or varied items are recommended.`, severity: 'warning' });
+        else tips.push({ icon: icon('apple'), text: `${name}'s morning snack intake is below expected levels (${snackAvg}%). Kindly explore preferred food options or adjust portion size.`, severity: 'critical' });
 
         // Lunch tips
-        if (lunchAvg >= 90) tips.push({ icon: '⭐', text: `${name} demonstrates excellent afternoon meal consumption (${lunchAvg}%). Healthy appetite observed at school.`, severity: 'positive' });
-        else if (lunchAvg >= 70) tips.push({ icon: '🍽️', text: `${name} consumed ${lunchAvg}% of afternoon meals. Good progress; preferred menu items may further improve intake.`, severity: 'info' });
-        else if (lunchAvg >= 50) tips.push({ icon: '🍽️', text: `${name} consumed only ${lunchAvg}% of afternoon meals. Lighter or preferred meal options are recommended.`, severity: 'warning' });
-        else tips.push({ icon: '🍽️', text: `${name}'s afternoon meal intake requires attention (${lunchAvg}%). Kindly explore alternative meal options or adjust portion size.`, severity: 'critical' });
+        if (lunchAvg >= 90) tips.push({ icon: icon('star'), text: `${name} demonstrates excellent afternoon meal consumption (${lunchAvg}%). Healthy appetite observed at school.`, severity: 'positive' });
+        else if (lunchAvg >= 70) tips.push({ icon: icon('utensils'), text: `${name} consumed ${lunchAvg}% of afternoon meals. Good progress; preferred menu items may further improve intake.`, severity: 'info' });
+        else if (lunchAvg >= 50) tips.push({ icon: icon('utensils'), text: `${name} consumed only ${lunchAvg}% of afternoon meals. Lighter or preferred meal options are recommended.`, severity: 'warning' });
+        else tips.push({ icon: icon('utensils'), text: `${name}'s afternoon meal intake requires attention (${lunchAvg}%). Kindly explore alternative meal options or adjust portion size.`, severity: 'critical' });
 
         // Water tips with monthly context
-        if (waterAvg >= 90) tips.push({ icon: '💧', text: `${name} maintains excellent hydration levels (${waterAvg}%). Weekly consumption: ${Math.round(weekBottles)} bottles. Monthly total: ${Math.round(monthlyBottles)} bottles across ${monthlyDaysPresent} days. As per WHO guidelines for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}, daily intake of ~${WHO_WATER_STANDARDS[CURRENT_CLASS].dailyLitres}L is recommended — well maintained.`, severity: 'positive' });
-        else if (waterAvg >= 70) tips.push({ icon: '💧', text: `${name}'s hydration level stands at ${waterAvg}%. Weekly: ${Math.round(weekBottles)} bottles (monthly: ${Math.round(monthlyBottles)}). WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L during school hours for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}. Encouraging regular sips throughout the day is advisable.`, severity: 'info' });
-        else if (waterAvg >= 50) tips.push({ icon: '💧', text: `${name}'s hydration is moderate (${waterAvg}%). Weekly: ${Math.round(weekBottles)} bottles. WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolBottles} bottles during school hours for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}. A larger bottle or infused water may encourage better intake.`, severity: 'warning' });
-        else tips.push({ icon: '💧', text: `${name}'s water intake requires immediate attention (${waterAvg}%). Only ${Math.round(weekBottles)} bottles this week. WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].dailyLitres}L daily for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}. Establishing regular hydration breaks at home is strongly recommended.`, severity: 'critical' });
+        if (waterAvg >= 90) tips.push({ icon: icon('droplet'), text: `${name} maintains excellent hydration levels (${waterAvg}%). Weekly consumption: ${Math.round(weekBottles)} bottles. Monthly total: ${Math.round(monthlyBottles)} bottles across ${monthlyDaysPresent} days. As per WHO guidelines for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}, daily intake of ~${WHO_WATER_STANDARDS[CURRENT_CLASS].dailyLitres}L is recommended — well maintained.`, severity: 'positive' });
+        else if (waterAvg >= 70) tips.push({ icon: icon('droplet'), text: `${name}'s hydration level stands at ${waterAvg}%. Weekly: ${Math.round(weekBottles)} bottles (monthly: ${Math.round(monthlyBottles)}). WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L during school hours for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}. Encouraging regular sips throughout the day is advisable.`, severity: 'info' });
+        else if (waterAvg >= 50) tips.push({ icon: icon('droplet'), text: `${name}'s hydration is moderate (${waterAvg}%). Weekly: ${Math.round(weekBottles)} bottles. WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolBottles} bottles during school hours for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}. A larger bottle or infused water may encourage better intake.`, severity: 'warning' });
+        else tips.push({ icon: icon('droplet'), text: `${name}'s water intake requires immediate attention (${waterAvg}%). Only ${Math.round(weekBottles)} bottles this week. WHO recommends ~${WHO_WATER_STANDARDS[CURRENT_CLASS].dailyLitres}L daily for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange}. Establishing regular hydration breaks at home is strongly recommended.`, severity: 'critical' });
 
         // Attendance
-        if (attendance === totalSchoolDays && totalSchoolDays > 0) tips.push({ icon: '🏆', text: `Full attendance achieved! ${name} was present all ${totalSchoolDays} working days this week. Regular attendance fosters consistent learning habits.`, severity: 'positive' });
-        else if (absentDays === 1) tips.push({ icon: '📅', text: `${name} was absent for 1 day this week (${attendance} of ${totalSchoolDays} working days attended). That day included structured learning modules, 3L skills, co-curricular activities, and interactive sessions — looking forward to full attendance next week.`, severity: 'info' });
-        else if (absentDays >= 2) tips.push({ icon: '📅', text: `${name} was absent for ${absentDays} days this week. Each school day encompasses structured learning, 3L skills, co-curricular activities, dramatic arts, and interactive sessions — regular attendance ensures your child benefits from all programmes.`, severity: 'warning' });
+        if (attendance === totalSchoolDays && totalSchoolDays > 0) tips.push({ icon: icon('trophy'), text: `Full attendance achieved! ${name} was present all ${totalSchoolDays} working days this week. Regular attendance fosters consistent learning habits.`, severity: 'positive' });
+        else if (absentDays === 1) tips.push({ icon: icon('calendar'), text: `${name} was absent for 1 day this week (${attendance} of ${totalSchoolDays} working days attended). That day included structured learning modules, 3L skills, co-curricular activities, and interactive sessions — looking forward to full attendance next week.`, severity: 'info' });
+        else if (absentDays >= 2) tips.push({ icon: icon('calendar'), text: `${name} was absent for ${absentDays} days this week. Each school day encompasses structured learning, 3L skills, co-curricular activities, dramatic arts, and interactive sessions — regular attendance ensures your child benefits from all programmes.`, severity: 'warning' });
 
         // Arrival time insight
         const arrivalPattern = this.analyzeArrivalPattern(studentName, weekIdx);
         if (arrivalPattern) {
             if (arrivalPattern.onTimePercentage === 100) {
-                tips.push({ icon: '⏰', text: `${name} reported on time every day (average check-in: ${arrivalPattern.average}). Excellent punctuality demonstrated.`, severity: 'positive' });
+                tips.push({ icon: icon('clock'), text: `${name} reported on time every day (average check-in: ${arrivalPattern.average}). Excellent punctuality demonstrated.`, severity: 'positive' });
             } else if (arrivalPattern.lateCount >= 2) {
-                tips.push({ icon: '⏰', text: `${name} arrived after 9:05 AM on ${arrivalPattern.lateCount} day(s) this week (latest: ${arrivalPattern.latest}). School commences at 9:00 AM with morning assembly, physical exercises, and yoga — timely arrival enables full participation.`, severity: 'warning' });
+                tips.push({ icon: icon('clock'), text: `${name} arrived after 9:05 AM on ${arrivalPattern.lateCount} day(s) this week (latest: ${arrivalPattern.latest}). School commences at 9:00 AM with morning assembly, physical exercises, and yoga — timely arrival enables full participation.`, severity: 'warning' });
             }
         }
 
@@ -313,7 +313,7 @@ const AIEngine = {
         if (weekIdx >= 1) {
             const prefs = this.detectFoodPreferences(studentName);
             if (prefs.topSnacks.length > 0) {
-                tips.push({ icon: '🧠', text: `Pattern identified: ${name} shows higher intake when served ${prefs.topSnacks.slice(0, 2).join(' or ')}. Including these items more frequently is recommended.`, severity: 'info' });
+                tips.push({ icon: icon('brain'), text: `Pattern identified: ${name} shows higher intake when served ${prefs.topSnacks.slice(0, 2).join(' or ')}. Including these items more frequently is recommended.`, severity: 'info' });
             }
         }
 
@@ -322,7 +322,7 @@ const AIEngine = {
         // Uniform compliance
         const nonUniformDays = active.filter(d => d.uniform === 'NO').length;
         if (nonUniformDays > 0) {
-            tips.push({ icon: '👕', text: `${name} was not in prescribed uniform on ${nonUniformDays} day(s). Adherence to dress code fosters discipline and institutional identity. Kindly refer to the school calendar for uniform and colour dress schedules.`, severity: 'warning' });
+            tips.push({ icon: icon('shirt'), text: `${name} was not in prescribed uniform on ${nonUniformDays} day(s). Adherence to dress code fosters discipline and institutional identity. Kindly refer to the school calendar for uniform and colour dress schedules.`, severity: 'warning' });
         }
 
         return tips;
@@ -425,22 +425,22 @@ const AIEngine = {
             else { consecutiveAbsent = 0; }
         });
 
-        if (maxConsecutive >= 3) anomalies.push({ severity: 'critical', icon: '🔴', text: `${name} was absent for ${maxConsecutive} consecutive days this week. Structured learning modules, 3L skill development, and co-curricular activities were missed — regular attendance is essential for holistic development.`, type: 'attendance' });
-        else if (maxConsecutive === 2) anomalies.push({ severity: 'warning', icon: '🟡', text: `${name} was absent for 2 consecutive days this week. Consistent attendance enables your child to maintain learning continuity and peer engagement.`, type: 'attendance' });
+        if (maxConsecutive >= 3) anomalies.push({ severity: 'critical', icon: icon('alertCircle'), text: `${name} was absent for ${maxConsecutive} consecutive days this week. Structured learning modules, 3L skill development, and co-curricular activities were missed — regular attendance is essential for holistic development.`, type: 'attendance' });
+        else if (maxConsecutive === 2) anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${name} was absent for 2 consecutive days this week. Consistent attendance enables your child to maintain learning continuity and peer engagement.`, type: 'attendance' });
 
         if (!active.length) return anomalies;
 
         // Sudden daily drops (present but 0%)
         active.forEach(d => {
-            if (this.pct(d.snack_completion) === 0 && d.snacks !== 'N/A') anomalies.push({ severity: 'warning', icon: '🟡', text: `${d.day}: ${name} did not consume morning snack despite it being provided. Preference changes may be a factor.`, type: 'metric' });
-            if (this.pct(d.lunch_completion) === 0 && d.lunch !== 'N/A') anomalies.push({ severity: 'warning', icon: '🟡', text: `${d.day}: ${name} did not consume afternoon meal. Dietary preferences may be evolving — alternative options are worth exploring.`, type: 'metric' });
-            if (this.pct(d.water_completion) === 0) anomalies.push({ severity: 'critical', icon: '🔴', text: `${d.day}: ${name} recorded zero water intake. Establishing regular hydration habits at home is strongly advised.`, type: 'health' });
+            if (this.pct(d.snack_completion) === 0 && d.snacks !== 'N/A') anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${d.day}: ${name} did not consume morning snack despite it being provided. Preference changes may be a factor.`, type: 'metric' });
+            if (this.pct(d.lunch_completion) === 0 && d.lunch !== 'N/A') anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${d.day}: ${name} did not consume afternoon meal. Dietary preferences may be evolving — alternative options are worth exploring.`, type: 'metric' });
+            if (this.pct(d.water_completion) === 0) anomalies.push({ severity: 'critical', icon: icon('alertCircle'), text: `${d.day}: ${name} recorded zero water intake. Establishing regular hydration habits at home is strongly advised.`, type: 'health' });
         });
 
         // Late arrival pattern
         const arrivalPattern = this.analyzeArrivalPattern(studentName, weekIdx);
         if (arrivalPattern && arrivalPattern.lateCount >= 3) {
-            anomalies.push({ severity: 'warning', icon: '🟠', text: `${name} arrived after 9:05 AM on ${arrivalPattern.lateCount} of ${active.length} days this week (average check-in: ${arrivalPattern.average}). School commences at 9:00 AM with morning assembly, physical exercises, and yoga — punctual arrival enables full participation in all activities.`, type: 'punctuality' });
+            anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${name} arrived after 9:05 AM on ${arrivalPattern.lateCount} of ${active.length} days this week (average check-in: ${arrivalPattern.average}). School commences at 9:00 AM with morning assembly, physical exercises, and yoga — punctual arrival enables full participation in all activities.`, type: 'punctuality' });
         }
 
         // Week-over-week drops
@@ -452,8 +452,8 @@ const AIEngine = {
                 metrics.forEach((m, i) => {
                     const curr = this.avg(active, m);
                     const prev = this.avg(prevActive, m);
-                    if (prev - curr > 30) anomalies.push({ severity: 'critical', icon: '🔴', text: `${labels[i]} intake declined significantly — from ${Math.round(prev)}% to ${Math.round(curr)}% this week. Dietary phases are normal; exploring new options or adjusted portions may help.`, type: 'trend' });
-                    else if (prev - curr > 20) anomalies.push({ severity: 'warning', icon: '🟡', text: `${labels[i]} intake declined by ${Math.round(prev - curr)}% compared to previous week. Minor adjustments in routine or menu may restore levels.`, type: 'trend' });
+                    if (prev - curr > 30) anomalies.push({ severity: 'critical', icon: icon('alertCircle'), text: `${labels[i]} intake declined significantly — from ${Math.round(prev)}% to ${Math.round(curr)}% this week. Dietary phases are normal; exploring new options or adjusted portions may help.`, type: 'trend' });
+                    else if (prev - curr > 20) anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${labels[i]} intake declined by ${Math.round(prev - curr)}% compared to previous week. Minor adjustments in routine or menu may restore levels.`, type: 'trend' });
                 });
 
                 // Only compare attendance if both weeks have similar data completeness
@@ -462,7 +462,7 @@ const AIEngine = {
                 const currTotalDays = currentWeek.days.filter(d => this.hasData(d)).length;
                 // Only flag if current week has at least as many days of data as previous week
                 if (currTotalDays >= prevTotalDays && prevAttendance - active.length >= 2) {
-                    anomalies.push({ severity: 'warning', icon: '🟡', text: `${name} attended ${prevAttendance - active.length} fewer days compared to previous week. Regular attendance supports learning continuity and peer relationships.`, type: 'attendance' });
+                    anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${name} attended ${prevAttendance - active.length} fewer days compared to previous week. Regular attendance supports learning continuity and peer relationships.`, type: 'attendance' });
                 }
             }
         }
@@ -471,7 +471,7 @@ const AIEngine = {
         const checkStreak = (metric, label) => {
             let lowStreak = 0;
             active.forEach(d => { if (this.pct(d[metric]) < 50 && this.pct(d[metric]) > 0) lowStreak++; });
-            if (lowStreak >= 3) anomalies.push({ severity: 'warning', icon: '🟠', text: `${label} intake was below 50% on ${lowStreak} days this week. Exploring alternative options may yield improvement.`, type: 'pattern' });
+            if (lowStreak >= 3) anomalies.push({ severity: 'warning', icon: icon('alert'), text: `${label} intake was below 50% on ${lowStreak} days this week. Exploring alternative options may yield improvement.`, type: 'pattern' });
         };
         checkStreak('snack_completion', 'Snacks');
         checkStreak('lunch_completion', 'Lunch');
@@ -480,7 +480,7 @@ const AIEngine = {
         // Variance anomaly (wildly inconsistent within the week)
         const snackValues = active.map(d => this.pct(d.snack_completion));
         if (snackValues.length >= 3 && this.variance(snackValues) > 1500) {
-            anomalies.push({ severity: 'info', icon: '📊', text: `${name}'s morning snack consumption varied considerably this week (${Math.min(...snackValues)}% to ${Math.max(...snackValues)}%). Identifying preferred items on high-intake days is recommended.`, type: 'pattern' });
+            anomalies.push({ severity: 'info', icon: icon('barChart'), text: `${name}'s morning snack consumption varied considerably this week (${Math.min(...snackValues)}% to ${Math.max(...snackValues)}%). Identifying preferred items on high-intake days is recommended.`, type: 'pattern' });
         }
 
         return anomalies;
@@ -501,11 +501,11 @@ const AIEngine = {
             const name = studentName.charAt(0) + studentName.slice(1).toLowerCase();
 
             if (active.length === 0) {
-                recs.push({ priority: 'urgent', icon: '🚨', text: `${name} was absent the entire week. Immediate parent communication recommended.`, student: studentName });
+                recs.push({ priority: 'urgent', icon: icon('siren'), text: `${name} was absent the entire week. Immediate parent communication recommended.`, student: studentName });
                 return;
             }
             if (active.length <= 2) {
-                recs.push({ priority: 'urgent', icon: '⚠️', text: `${name} attended only ${active.length} days this week. Follow-up on absences recommended.`, student: studentName });
+                recs.push({ priority: 'urgent', icon: icon('alert'), text: `${name} attended only ${active.length} days this week. Follow-up on absences recommended.`, student: studentName });
             }
 
             const snackAvg = this.avg(active, 'snack_completion');
@@ -513,23 +513,23 @@ const AIEngine = {
             const waterAvg = this.avg(active, 'water_completion');
             const overall = (snackAvg + lunchAvg + waterAvg) / 3;
 
-            if (waterAvg < 50) recs.push({ priority: 'urgent', icon: '💧', text: `${name}: Hydration critically low (${Math.round(waterAvg)}%). Ensure frequent hydration reminders.`, student: studentName });
-            else if (waterAvg < 70) recs.push({ priority: 'important', icon: '💧', text: `${name}: Hydration below target (${Math.round(waterAvg)}%). Additional encouragement needed.`, student: studentName });
+            if (waterAvg < 50) recs.push({ priority: 'urgent', icon: icon('droplet'), text: `${name}: Hydration critically low (${Math.round(waterAvg)}%). Ensure frequent hydration reminders.`, student: studentName });
+            else if (waterAvg < 70) recs.push({ priority: 'important', icon: icon('droplet'), text: `${name}: Hydration below target (${Math.round(waterAvg)}%). Additional encouragement needed.`, student: studentName });
 
-            if (lunchAvg < 50) recs.push({ priority: 'urgent', icon: '🍽️', text: `${name}: Afternoon meal intake very low (${Math.round(lunchAvg)}%). Dietary preferences or portion review needed.`, student: studentName });
-            else if (lunchAvg < 70) recs.push({ priority: 'important', icon: '🍽️', text: `${name}: Afternoon meal intake requires attention (${Math.round(lunchAvg)}%).`, student: studentName });
+            if (lunchAvg < 50) recs.push({ priority: 'urgent', icon: icon('utensils'), text: `${name}: Afternoon meal intake very low (${Math.round(lunchAvg)}%). Dietary preferences or portion review needed.`, student: studentName });
+            else if (lunchAvg < 70) recs.push({ priority: 'important', icon: icon('utensils'), text: `${name}: Afternoon meal intake requires attention (${Math.round(lunchAvg)}%).`, student: studentName });
 
-            if (snackAvg < 50) recs.push({ priority: 'important', icon: '🍎', text: `${name}: Morning snack intake low (${Math.round(snackAvg)}%). Preferred alternatives recommended.`, student: studentName });
+            if (snackAvg < 50) recs.push({ priority: 'important', icon: icon('apple'), text: `${name}: Morning snack intake low (${Math.round(snackAvg)}%). Preferred alternatives recommended.`, student: studentName });
 
             // Consistency-based recommendation
             const consistency = this.calculateConsistencyScore(studentName, weekIdx);
             if (consistency.score < 50) {
-                recs.push({ priority: 'important', icon: '📊', text: `${name}: Low consistency index (${consistency.score}/100). Structured routine support recommended.`, student: studentName });
+                recs.push({ priority: 'important', icon: icon('barChart'), text: `${name}: Low consistency index (${consistency.score}/100). Structured routine support recommended.`, student: studentName });
             }
 
             // Celebrations
-            if (overall >= 95) recs.push({ priority: 'celebrate', icon: '🏆', text: `${name} achieved ${Math.round(overall)}% overall — outstanding performance! Recognition recommended.`, student: studentName });
-            else if (overall >= 85 && active.length >= 5) recs.push({ priority: 'celebrate', icon: '⭐', text: `${name}: Excellent attendance with ${Math.round(overall)}% wellness score. Consistency achievement!`, student: studentName });
+            if (overall >= 95) recs.push({ priority: 'celebrate', icon: icon('trophy'), text: `${name} achieved ${Math.round(overall)}% overall — outstanding performance! Recognition recommended.`, student: studentName });
+            else if (overall >= 85 && active.length >= 5) recs.push({ priority: 'celebrate', icon: icon('star'), text: `${name}: Excellent attendance with ${Math.round(overall)}% wellness score. Consistency achievement!`, student: studentName });
 
             // Week-over-week decline
             if (weekIdx > 0) {
@@ -538,7 +538,7 @@ const AIEngine = {
                     const prevActive = this.getActive(prevWeek);
                     if (prevActive.length) {
                         const prevOverall = (this.avg(prevActive, 'snack_completion') + this.avg(prevActive, 'lunch_completion') + this.avg(prevActive, 'water_completion')) / 3;
-                        if (prevOverall - overall > 25) recs.push({ priority: 'important', icon: '📉', text: `${name}: Performance declined ${Math.round(prevOverall - overall)}% from previous week. Parent communication advised.`, student: studentName });
+                        if (prevOverall - overall > 25) recs.push({ priority: 'important', icon: icon('trendDown'), text: `${name}: Performance declined ${Math.round(prevOverall - overall)}% from previous week. Parent communication advised.`, student: studentName });
                     }
                 }
             }
