@@ -499,6 +499,65 @@
         .daily-grid { display: grid; grid-template-columns: 1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap: 10px; padding: 0.7rem 0; border-bottom: 1px solid rgba(51,65,85,0.4); align-items: center; }
         .daily-grid-header { display: grid; grid-template-columns: 1fr 1.3fr 1.3fr 1.8fr 0.5fr 0.6fr; gap: 10px; padding: 0.6rem 0; border-bottom: 1px solid #334155; margin-bottom: 0.4rem; }
 
+        
+        /* Smart Parent UX: Quick Summary Card */
+        .quick-summary { background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08)); border: 1px solid rgba(16,185,129,0.2); border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; animation: fadeInUp 0.4s ease; }
+        .quick-summary.status-good { border-color: rgba(16,185,129,0.3); }
+        .quick-summary.status-moderate { border-color: rgba(245,158,11,0.3); background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(59,130,246,0.06)); }
+        .quick-summary.status-concern { border-color: rgba(244,63,94,0.3); background: linear-gradient(135deg, rgba(244,63,94,0.08), rgba(59,130,246,0.06)); }
+        .quick-summary-title { font-size: 1.1rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.8rem; }
+        .quick-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 0.8rem; }
+        .quick-summary-item { text-align: center; }
+        .quick-summary-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; vertical-align: middle; }
+        .dot-green { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+        .dot-yellow { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.5); }
+        .dot-red { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+        .quick-summary-label { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+        .quick-summary-value { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-top: 2px; }
+        .quick-summary-tip { font-size: 0.75rem; color: #94a3b8; padding-top: 0.6rem; border-top: 1px solid rgba(51,65,85,0.4); font-style: italic; }
+
+        /* Collapsible Sections */
+        .section-toggle { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px; }
+        .section-toggle::before { content: "\25BC"; font-size: 0.6rem; color: #60a5fa; transition: transform 0.3s ease; display: inline-block; }
+        .section-toggle.collapsed::before { transform: rotate(-90deg); }
+        .section-content { max-height: 5000px; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 1; }
+        .section-content.hidden { max-height: 0; opacity: 0; margin: 0; padding: 0; }
+
+        /* View Mode Toggle */
+        .view-toggle { display: flex; background: rgba(30,41,59,0.8); border-radius: 8px; padding: 3px; border: 1px solid rgba(51,65,85,0.5); margin-bottom: 1.2rem; width: fit-content; }
+        .view-toggle-btn { padding: 6px 16px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #94a3b8; border: none; background: transparent; font-family: inherit; }
+        .view-toggle-btn.active { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.3); }
+
+        /* Expandable Rows */
+        .expand-btn { cursor: pointer; font-size: 0.7rem; color: #60a5fa; font-weight: 600; padding: 2px 8px; border-radius: 4px; transition: background 0.2s; }
+        .expand-btn:hover { background: rgba(59,130,246,0.1); }
+        .row-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding: 0; }
+        .row-details.expanded { max-height: 200px; padding: 8px 0; }
+
+        /* Tooltip */
+        .help-tip { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; background: rgba(96,165,250,0.15); color: #60a5fa; font-size: 0.55rem; font-weight: 700; cursor: help; position: relative; margin-left: 4px; vertical-align: middle; }
+        .help-tip:hover::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 10px; border-radius: 6px; font-size: 0.65rem; white-space: nowrap; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-weight: 400; max-width: 200px; white-space: normal; }
+
+        /* Traffic Light Status */
+        .status-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6rem; font-weight: 600; margin-top: 4px; }
+        .status-indicator.excellent { color: #22c55e; }
+        .status-indicator.good { color: #f59e0b; }
+        .status-indicator.attention { color: #ef4444; }
+
+        /* Light theme overrides for new elements */
+        body.theme-light .quick-summary { background: linear-gradient(135deg, rgba(16,185,129,0.05), rgba(59,130,246,0.05)); }
+        body.theme-light .quick-summary-title { color: #0f172a; }
+        body.theme-light .quick-summary-value { color: #1e293b; }
+        body.theme-light .quick-summary-tip { color: #475569; border-color: rgba(148,163,184,0.3); }
+        body.theme-light .view-toggle { background: rgba(241,245,249,0.9); border-color: rgba(148,163,184,0.3); }
+        body.theme-light .view-toggle-btn { color: #475569; }
+        body.theme-light .section-toggle::before { color: #3b82f6; }
+        body.theme-light .help-tip:hover::after { background: #fff; color: #334155; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        @media (max-width: 768px) {
+            .quick-summary-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .sidebar { display: none; }
@@ -752,6 +811,56 @@
         function pct(val) { return Math.min(Math.round(val * 100), 100); }
         function isValidVal(v) { return v && v !== 'N/A' && v !== '-'; }
         
+        
+        // === Smart Parent UX: Helper Functions ===
+        function getStatusDot(pct) {
+            if (pct >= 80) return '<span class="quick-summary-dot dot-green"></span>';
+            if (pct >= 60) return '<span class="quick-summary-dot dot-yellow"></span>';
+            return '<span class="quick-summary-dot dot-red"></span>';
+        }
+        function getStatusText(pct) {
+            if (pct >= 80) return '<div class="status-indicator excellent">Excellent</div>';
+            if (pct >= 60) return '<div class="status-indicator good">Good</div>';
+            return '<div class="status-indicator attention">Needs Attention</div>';
+        }
+        function getOverallStatus(att, snack, lunch, water) {
+            const avg = (att + snack + lunch + water) / 4;
+            if (avg >= 80) return { cls: 'status-good', emoji: '\u2705', text: 'had a great week!' };
+            if (avg >= 60) return { cls: 'status-moderate', emoji: '\uD83D\uDCC8', text: 'had a good week with room to improve.' };
+            return { cls: 'status-concern', emoji: '\u26A0\uFE0F', text: 'needs some extra attention this week.' };
+        }
+        function toggleSection(id) {
+            const el = document.getElementById(id);
+            const header = el.previousElementSibling;
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                header.classList.remove('collapsed');
+                localStorage.setItem('section_' + id, 'open');
+            } else {
+                el.classList.add('hidden');
+                header.classList.add('collapsed');
+                localStorage.setItem('section_' + id, 'closed');
+            }
+        }
+        function setViewMode(mode) {
+            localStorage.setItem('viewMode', mode);
+            document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-view="${mode}"]`).classList.add('active');
+            const detailedSections = document.querySelectorAll('.detailed-only');
+            detailedSections.forEach(el => {
+                el.style.display = mode === 'summary' ? 'none' : '';
+            });
+        }
+        function toggleRow(rowId) {
+            const el = document.getElementById(rowId);
+            el.classList.toggle('expanded');
+        }
+        // Restore view mode on load
+        function restoreViewMode() {
+            const mode = localStorage.getItem('viewMode') || 'summary';
+            setViewMode(mode);
+        }
+
         // Sparkline SVG generator
         function sparkline(values, color) {
             if (!values || values.length < 2) return '';
@@ -1164,19 +1273,19 @@
 
             let html = `
                 ${achievements.length > 0 ? `<div class="achievement-strip">${achievements.map(a => `<div class="achievement ${a.cls}">${a.icon} ${a.text}</div>`).join('')}</div>` : ''}
-                <div class="section-header" style="margin-top:1.5rem;">NOURISHMENT & WELLNESS</div>
+                <div class="section-header section-toggle" style="margin-top:1.5rem;" onclick="toggleSection('sec-nourishment')">NOURISHMENT & WELLNESS</div><div id="sec-nourishment" class="section-content">
                 <div class="kpi-grid" >
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-                        <div class="kpi-label">Morning Snack</div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div>${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week${sparkline(snackSpark, '#a78bfa')}</div>
+                        <div class="kpi-label">Morning Snack<span class="help-tip" data-tip="Percentage of morning snack your child finished at school">?</span></div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div>${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
                     </div>
                     <div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
-                        <div class="kpi-label">Afternoon Meal</div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div>${deltaHtml(lunchDelta)}<div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week${sparkline(lunchSpark, '#34d399')}</div>
+                        <div class="kpi-label">Afternoon Meal<span class="help-tip" data-tip="How much of the lunch box your child completed">?</span></div><div class="kpi-value accent-green">${Math.round(lunchAvg)}%</div>${deltaHtml(lunchDelta)}<div class="kpi-sublabel">Afternoon meal intake rate: ${Math.round(lunchAvg)}% this week ${getStatusText(lunchAvg)}${sparkline(lunchSpark, '#34d399')}</div>
                     </div>
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
-                        <div class="kpi-label">Hydration Level</div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div>${deltaHtml(waterDelta)}<div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
+                        <div class="kpi-label">Hydration Level<span class="help-tip" data-tip="How well your child drinks water at school vs WHO recommended intake">?</span></div><div class="kpi-value accent-blue">${Math.round(waterAvg)}%</div>${deltaHtml(waterDelta)}<div class="kpi-sublabel">Water intake rate: ${Math.round(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
                     </div>
                     <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
                         <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
@@ -1296,7 +1405,7 @@
                 return `${dd} ${months[dt.getMonth()]}`;
             }
 
-            html += `<div class="section-header">DAILY PROGRESS REPORT</div>`;
+            html += `</div><div class="section-header section-toggle detailed-only" onclick="toggleSection('sec-daily')">DAILY PROGRESS REPORT</div><div id="sec-daily" class="section-content detailed-only">`;
             html += `<div class="daily-grid-header">
                 <span style="font-size:0.62rem; color:#93c5fd; font-weight:600;">DAY / DATE / CHECK-IN</span>
                 <span style="font-size:0.62rem; color:#c4b5fd; font-weight:600;">MORNING SNACK / INTAKE</span>
