@@ -1272,6 +1272,7 @@
             const dashOffset = circumference - (gaugeScore / 100) * circumference;
 
             // Quick Summary Card
+            const studentNameFormatted = selectedStudent.charAt(0) + selectedStudent.slice(1).toLowerCase();
             const attPct = totalSchoolDays > 0 ? Math.round((active.length / totalSchoolDays) * 100) : 0;
             const overallSt = getOverallStatus(attPct, snackAvg, lunchAvg, waterAvg);
             const concerns = [];
@@ -1480,6 +1481,7 @@
 
             // AI Insights - Weekly Summary
             const summary = AIEngine.generateWeeklySummary(selectedStudent, selectedWeekIdx);
+            html += `</div>`;
             html += `<div class="ai-card" style="margin-top:2rem;">
                 <div class="ai-card-header"><span style="font-size:1.1rem;">&#x1F4DD;</span> Weekly Performance Summary</div>
                 <div class="ai-summary-text">${summary}</div>
