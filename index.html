@@ -282,7 +282,7 @@
         
         /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 2rem; }
-        .kpi-card { background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-card); border-radius: 20px; padding: 1.6rem; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; box-shadow: var(--card-shadow), var(--card-inset); }
+        .kpi-card { background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-card); border-radius: 16px; padding: 1.2rem 0.8rem; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; box-shadow: var(--card-shadow), var(--card-inset); word-break: break-word; }
         .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); border-color: rgba(59,130,246,0.3); }
         .kpi-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.9rem; }
@@ -1271,10 +1271,34 @@
             const circumference = 2 * Math.PI * 45;
             const dashOffset = circumference - (gaugeScore / 100) * circumference;
 
+            // Quick Summary Card
+            const attPct = totalSchoolDays > 0 ? Math.round((active.length / totalSchoolDays) * 100) : 0;
+            const overallSt = getOverallStatus(attPct, snackAvg, lunchAvg, waterAvg);
+            const concerns = [];
+            if (attPct < 60) concerns.push('attendance');
+            if (snackAvg < 60) concerns.push('morning snack');
+            if (lunchAvg < 60) concerns.push('afternoon meal');
+            if (waterAvg < 60) concerns.push('hydration');
+            const tipText = AIEngine.generateTips(selectedStudent, selectedWeekIdx)[0] || 'Keep up the great routine!';
+
             let html = `
+                <div class="quick-summary ${overallSt.cls}">
+                    <div class="quick-summary-title">${overallSt.emoji} ${studentNameFormatted} ${overallSt.text}</div>
+                    <div class="quick-summary-grid">
+                        <div class="quick-summary-item">${getStatusDot(attPct)}<div class="quick-summary-label">Attendance</div><div class="quick-summary-value">${active.length}/${totalSchoolDays}</div></div>
+                        <div class="quick-summary-item">${getStatusDot(snackAvg)}<div class="quick-summary-label">Nutrition</div><div class="quick-summary-value">${Math.round((snackAvg + lunchAvg) / 2)}%</div></div>
+                        <div class="quick-summary-item">${getStatusDot(waterAvg)}<div class="quick-summary-label">Hydration</div><div class="quick-summary-value">${Math.round(waterAvg)}%</div></div>
+                        <div class="quick-summary-item">${concerns.length === 0 ? '<span class="quick-summary-dot dot-green"></span>' : '<span class="quick-summary-dot dot-yellow"></span>'}<div class="quick-summary-label">Status</div><div class="quick-summary-value">${concerns.length === 0 ? 'All Good' : concerns.length + ' area(s)'}</div></div>
+                    </div>
+                    <div class="quick-summary-tip">${tipText}</div>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" data-view="summary" onclick="setViewMode('summary')">Summary</button>
+                    <button class="view-toggle-btn" data-view="detailed" onclick="setViewMode('detailed')">Detailed</button>
+                </div>
                 ${achievements.length > 0 ? `<div class="achievement-strip">${achievements.map(a => `<div class="achievement ${a.cls}">${a.icon} ${a.text}</div>`).join('')}</div>` : ''}
                 <div class="section-header section-toggle" style="margin-top:1.5rem;" onclick="toggleSection('sec-nourishment')">NOURISHMENT & WELLNESS</div><div id="sec-nourishment" class="section-content">
-                <div class="kpi-grid" >
+                <div class="kpi-grid">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
                         <div class="kpi-label">Morning Snack<span class="help-tip" data-tip="Percentage of morning snack your child finished at school">?</span></div><div class="kpi-value accent-purple">${Math.round(snackAvg)}%</div>${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${Math.round(snackAvg)}% this week ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
@@ -1298,7 +1322,7 @@
                 </div>
 
                 <div class="section-header">ATTENDANCE & HYDRATION</div>
-                <div class="kpi-grid" >
+                <div class="kpi-grid">
                     <div class="kpi-card" style="border-top:3px solid #22c55e;">
                         <div class="kpi-icon" style="background:rgba(34,197,94,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                         <div class="kpi-label">Days Attended</div><div class="kpi-value" style="color:#34d399;">${active.length}</div><div class="kpi-sublabel">Present for ${active.length} of ${totalSchoolDays} working days this week</div>
