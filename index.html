@@ -1468,7 +1468,8 @@
             if (snackAvg < 60) concerns.push('morning snack');
             if (lunchAvg < 60) concerns.push('afternoon meal');
             if (waterAvg < 60) concerns.push('hydration');
-            const tipText = (typeof AIEngine !== 'undefined' && AIEngine.generateTips) ? (AIEngine.generateTips(selectedStudent, selectedWeekIdx)[0] || 'Keep up the great routine!') : 'Keep up the great routine!';
+            const tipRaw = (typeof AIEngine !== 'undefined' && AIEngine.generateTips) ? AIEngine.generateTips(selectedStudent, selectedWeekIdx)[0] : null;
+            const tipText = tipRaw ? (typeof tipRaw === 'string' ? tipRaw : tipRaw.text || 'Keep up the great routine!') : 'Keep up the great routine!';
 
             let html = `
                 <div class="quick-summary ${overallSt.cls}">
