@@ -95,11 +95,18 @@ const I18N = {
         
         // Misc
         bottles: 'bottles',
+        refills: 'Refills',
+        attire: 'Attire',
         completed: 'completed',
         whoGuideline: 'WHO guideline',
         forAges: 'for ages',
         daysPresent: 'days present',
         schoolDays: 'school days',
+        dayDateCheckin: 'Day / Date / Check-in',
+        morningSnackIntake: 'Morning Snack / Intake',
+        afternoonMealIntake: 'Afternoon Meal / Intake',
+        preferenceHydration: 'Preference / Hydration',
+        academicPeriod: 'Academic Period',
     },
     
     te: {
@@ -193,11 +200,18 @@ const I18N = {
         
         // Misc
         bottles: 'బాటిళ్ళు',
+        refills: 'రీఫిల్స్',
+        attire: 'దుస్తులు',
         completed: 'పూర్తయింది',
         whoGuideline: 'WHO మార్గదర్శకం',
         forAges: 'వయస్సు',
         daysPresent: 'రోజులు హాజరు',
         schoolDays: 'పాఠశాల రోజులు',
+        dayDateCheckin: 'రోజు / తేదీ / చెక్-ఇన్',
+        morningSnackIntake: 'ఉదయం స్నాక్ / తీసుకున్నది',
+        afternoonMealIntake: 'మధ్యాహ్న భోజనం / తీసుకున్నది',
+        preferenceHydration: 'ఇష్టం / నీరు',
+        academicPeriod: 'విద్యా కాలం',
     },
     
     hi: {
@@ -291,11 +305,18 @@ const I18N = {
         
         // Misc
         bottles: 'बोतलें',
+        refills: 'रिफिल',
+        attire: 'पोशाक',
         completed: 'पूर्ण',
         whoGuideline: 'WHO दिशानिर्देश',
         forAges: 'उम्र के लिए',
         daysPresent: 'दिन उपस्थित',
         schoolDays: 'स्कूल के दिन',
+        dayDateCheckin: 'दिन / तिथि / चेक-इन',
+        morningSnackIntake: 'सुबह का नाश्ता / सेवन',
+        afternoonMealIntake: 'दोपहर का भोजन / सेवन',
+        preferenceHydration: 'पसंद / पानी',
+        academicPeriod: 'शैक्षणिक अवधि',
     }
 };
 
