@@ -3,7 +3,11 @@
 // Supports: English (en), Telugu (te), Hindi (hi)
 // ============================================
 
-const I18N = {
+// Current language state (overrides inline fallback)
+currentLang = localStorage.getItem('futuron-lang') || 'en';
+
+// Full translation data (overrides inline fallback)
+I18N = {
     en: {
         // Navigation & Layout
         parentPortal: 'Parent Portal',
@@ -338,25 +342,21 @@ const I18N = {
     }
 };
 
-// Current language state
-let currentLang = localStorage.getItem('futuron-lang') || 'en';
+// Override fallback functions with full implementations
+currentLang = localStorage.getItem('futuron-lang') || 'en';
 
-// Get translated string
-function t(key) {
+t = function(key) {
     return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
-}
+};
 
-// Set language and re-render
-function setLanguage(lang) {
+setLanguage = function(lang) {
     currentLang = lang;
     localStorage.setItem('futuron-lang', lang);
     document.documentElement.lang = lang === 'te' ? 'te' : lang === 'hi' ? 'hi' : 'en';
-    // Update language picker active state
-    document.querySelectorAll('.lang-btn').forEach(b => {
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
         b.classList.toggle('active', b.dataset.lang === lang);
     });
-    // Re-render if render function exists and data is loaded
     if (typeof render === 'function' && typeof studentsData !== 'undefined' && Object.keys(studentsData).length > 0) {
         render();
     }
-}
+};
