@@ -1469,7 +1469,7 @@
             if (lunchAvg < 60) concerns.push('afternoon meal');
             if (waterAvg < 60) concerns.push('hydration');
             const tipRaw = (typeof AIEngine !== 'undefined' && AIEngine.generateTips) ? AIEngine.generateTips(selectedStudent, selectedWeekIdx)[0] : null;
-            const tipText = tipRaw ? (typeof tipRaw === 'string' ? tipRaw : tipRaw.text || 'Keep up the great routine!') : 'Keep up the great routine!';
+            const tipText = !tipRaw ? 'Keep up the great routine!' : (typeof tipRaw === 'object' ? (tipRaw.text || 'Keep up the great routine!') : String(tipRaw));
 
             let html = `
                 <div class="quick-summary ${overallSt.cls}">
