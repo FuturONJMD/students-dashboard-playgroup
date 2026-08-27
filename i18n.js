@@ -107,6 +107,12 @@ const I18N = {
         afternoonMealIntake: 'Afternoon Meal / Intake',
         preferenceHydration: 'Preference / Hydration',
         academicPeriod: 'Academic Period',
+        weeklyAverage: 'Weekly Average',
+        upcoming: 'Upcoming',
+        uniformYes: 'Uniform',
+        uniformNo: 'No',
+        colorDay: 'Color Day',
+        waterLabel: 'Water',
     },
     
     te: {
@@ -212,6 +218,12 @@ const I18N = {
         afternoonMealIntake: 'మధ్యాహ్న భోజనం / తీసుకున్నది',
         preferenceHydration: 'ఇష్టం / నీరు',
         academicPeriod: 'విద్యా కాలం',
+        weeklyAverage: 'వారపు సగటు',
+        upcoming: 'రాబోతోంది',
+        uniformYes: 'యూనిఫారం',
+        uniformNo: 'లేదు',
+        colorDay: 'కలర్ డే',
+        waterLabel: 'నీరు',
     },
     
     hi: {
@@ -317,6 +329,12 @@ const I18N = {
         afternoonMealIntake: 'दोपहर का भोजन / सेवन',
         preferenceHydration: 'पसंद / पानी',
         academicPeriod: 'शैक्षणिक अवधि',
+        weeklyAverage: 'साप्ताहिक औसत',
+        upcoming: 'आगामी',
+        uniformYes: 'यूनिफॉर्म',
+        uniformNo: 'नहीं',
+        colorDay: 'कलर डे',
+        waterLabel: 'पानी',
     }
 };
 

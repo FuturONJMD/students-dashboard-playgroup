@@ -1115,7 +1115,7 @@
                 html += `<div class="heatmap-cell ${cls}" title="Day ${d}: ${status}"></div>`;
             }
             html += '</div>';
-            html += '<div class="heatmap-legend"><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-present"></div>Present</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-absent"></div>Absent</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-holiday"></div>Holiday</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-future"></div>Upcoming</div></div>';
+            html += '<div class="heatmap-legend"><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-present"></div>' + t('present') + '</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-absent"></div>' + t('absent') + '</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-holiday"></div>' + t('holiday') + '</div><div class="heatmap-legend-item"><div class="heatmap-legend-dot heatmap-future"></div>' + t('upcoming') + '</div></div>';
             html += '</div>';
             // Heatmap attendance calendar
             const weeks = studentsData[selectedStudent];
@@ -1523,7 +1523,7 @@
                             <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(51,65,85,0.4)" stroke-width="7"/><circle cx="40" cy="40" r="30" fill="none" stroke="${gaugeColor}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${2*Math.PI*30}" stroke-dashoffset="${2*Math.PI*30 - (gaugeScore/100)*2*Math.PI*30}" style="transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1s ease;"/></svg>
                             <div class="radial-gauge-value" style="color:${gaugeColor};font-size:1.2rem;">${gaugeScore}%</div>
                         </div>
-                        <div class="kpi-label">Overall Score</div>
+                        <div class="kpi-label">${t('overallScore')}</div>
                         <div class="kpi-sublabel">${gaugeScore >= 90 ? 'Excellent' : gaugeScore >= 75 ? 'Good' : gaugeScore >= 60 ? 'Moderate' : 'Needs Attention'}</div>
                     </div>
                 </div>
@@ -1573,7 +1573,7 @@
                     <div style="display:flex; align-items:center; gap:20px; margin-bottom:16px;">
                         <div style="text-align:center;">
                             <div style="font-size:2.4rem; font-weight:700; color:${nutritionColor};">${avgNutrition}%</div>
-                            <div style="font-size:0.72rem; color:#94a3b8; margin-top:4px;">Weekly Average</div>
+                            <div style="font-size:0.72rem; color:#94a3b8; margin-top:4px;">${t('weeklyAverage')}</div>
                             <div style="font-size:0.68rem; font-weight:600; color:${nutritionColor}; margin-top:2px;">${nutritionGrade}</div>
                         </div>
                         <div style="flex:1;">
@@ -1657,29 +1657,29 @@
                     html += `<div class="daily-grid">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div></div>
                         <div style="grid-column:2/5; color:#a78bfa; font-style:italic; font-size:0.8rem;">${isSecondSaturday(d) ? '2nd Saturday — Institutional Holiday' : (d.arrival_time || 'HOLIDAY').replace(/HOLIDAY/i, '').trim() ? (d.arrival_time || '').replace(/HOLIDAY/i, '').trim() + ' — School Holiday' : 'School Holiday'}</div>
-                        <div style="grid-column:5/7; text-align:center;"><span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">HOLIDAY</span></div>
+                        <div style="grid-column:5/7; text-align:center;"><span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">${t('holiday').toUpperCase()}</span></div>
                     </div>`;
                     return;
                 }
                 if (isAbsent(d)) {
                     html += `<div class="daily-grid" style="opacity:0.7;">
-                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time" style="color:#f43f5e;">ABSENT</div></div>
-                        <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
-                        <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
-                        <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">Absent</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
+                        <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time" style="color:#f43f5e;">${t('absent').toUpperCase()}</div></div>
+                        <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">${t('absent')}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
+                        <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">${t('absent')}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
+                        <div><div class="snap-value" style="color:#f43f5e; font-style:italic;">${t('absent')}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:0%; background:#f43f5e"></div></div></div>
                         <div style="text-align:center; color:#f43f5e; font-size:0.75rem;">--</div>
-                        <div style="text-align:center;"><span class="badge badge-yellow">ABSENT</span></div>
+                        <div style="text-align:center;"><span class="badge badge-yellow">${t('absent').toUpperCase()}</span></div>
                     </div>`;
                     return;
                 }
                 const sp = pct(d.snack_completion), lp = pct(d.lunch_completion), wp = pct(d.water_completion);
-                const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? '<span class="badge badge-green">Uniform</span>' : String(d.uniform || '').toUpperCase() === 'NO' ? '<span class="badge badge-yellow">No</span>' : String(d.uniform || '').toUpperCase().includes('COLOUR') ? '<span class="badge badge-purple">Color Day</span>' : `<span class="badge badge-yellow">${d.uniform}</span>`;
+                const uniformBadge = String(d.uniform || '').toUpperCase() === 'YES' ? `<span class="badge badge-green">${t('uniformYes')}</span>` : String(d.uniform || '').toUpperCase() === 'NO' ? `<span class="badge badge-yellow">${t('uniformNo')}</span>` : String(d.uniform || '').toUpperCase().includes('COLOUR') ? `<span class="badge badge-purple">${t('colorDay')}</span>` : `<span class="badge badge-yellow">${d.uniform}</span>`;
                 html += `
                     <div class="daily-grid">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
                         <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% ${t('completed')}</div></div>
                         <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% ${t('completed')}</div></div>
-                        <div><div class="snap-value">${d.interested_in}</div><div style="font-size:0.62rem; color:#60a5fa; margin-top:5px; font-weight:500;">Water: ${wp}%</div></div>
+                        <div><div class="snap-value">${d.interested_in}</div><div style="font-size:0.62rem; color:#60a5fa; margin-top:5px; font-weight:500;">${t('waterLabel')}: ${wp}%</div></div>
                         <div style="text-align:center;"><div style="font-size:1rem; font-weight:700; color:#fbbf24;">${d.bottle_refill}</div><div style="font-size:0.58rem; color:#64748b; font-weight:500;">${t('bottles')}</div></div>
                         <div style="text-align:center;">${uniformBadge}</div>
                     </div>`;
