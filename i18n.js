@@ -337,6 +337,8 @@ function setLanguage(lang) {
     document.querySelectorAll('.lang-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.lang === lang);
     });
-    // Re-render if render function exists
-    if (typeof render === 'function') render();
+    // Re-render if render function exists and data is loaded
+    if (typeof render === 'function' && typeof studentsData !== 'undefined' && Object.keys(studentsData).length > 0) {
+        render();
+    }
 }

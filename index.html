@@ -1508,15 +1508,15 @@
                 <div class="kpi-grid">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-                        <div class="kpi-label">${t('morningSnack')}<span class="help-tip" data-tip="Percentage of morning snack your child finished at school">?</span></div><div class="kpi-value accent-purple">${pct1(snackAvg)}%</div>${miniBar(snackAvg, '#a78bfa')}${deltaHtml(snackDelta)}<div class="kpi-sublabel">Morning snack consumption rate: ${pct1(snackAvg)}% this week ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
+                        <div class="kpi-label">${t('morningSnack')}<span class="help-tip" data-tip="Percentage of morning snack your child finished at school">?</span></div><div class="kpi-value accent-purple">${pct1(snackAvg)}%</div>${miniBar(snackAvg, '#a78bfa')}${deltaHtml(snackDelta)}<div class="kpi-sublabel">${t('snackRate')}: ${pct1(snackAvg)}% ${t('thisWeek')} ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
                     </div>
                     <div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
-                        <div class="kpi-label">${t('afternoonMeal')}<span class="help-tip" data-tip="How much of the lunch box your child completed">?</span></div><div class="kpi-value accent-green">${pct1(lunchAvg)}%</div>${miniBar(lunchAvg, '#34d399')}${deltaHtml(lunchDelta)}<div class="kpi-sublabel">Afternoon meal intake rate: ${pct1(lunchAvg)}% this week ${getStatusText(lunchAvg)}${sparkline(lunchSpark, '#34d399')}</div>
+                        <div class="kpi-label">${t('afternoonMeal')}<span class="help-tip" data-tip="How much of the lunch box your child completed">?</span></div><div class="kpi-value accent-green">${pct1(lunchAvg)}%</div>${miniBar(lunchAvg, '#34d399')}${deltaHtml(lunchDelta)}<div class="kpi-sublabel">${t('mealRate')}: ${pct1(lunchAvg)}% ${t('thisWeek')} ${getStatusText(lunchAvg)}${sparkline(lunchSpark, '#34d399')}</div>
                     </div>
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
-                        <div class="kpi-label">${t('hydrationLevel')}<span class="help-tip" data-tip="How well your child drinks water at school vs WHO recommended intake">?</span></div><div class="kpi-value accent-blue">${pct1(waterAvg)}%</div>${miniBar(waterAvg, '#60a5fa')}${deltaHtml(waterDelta)}<div class="kpi-sublabel">Water intake rate: ${pct1(waterAvg)}% (WHO guideline: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L for ages ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
+                        <div class="kpi-label">${t('hydrationLevel')}<span class="help-tip" data-tip="How well your child drinks water at school vs WHO recommended intake">?</span></div><div class="kpi-value accent-blue">${pct1(waterAvg)}%</div>${miniBar(waterAvg, '#60a5fa')}${deltaHtml(waterDelta)}<div class="kpi-sublabel">${t('waterRate')}: ${pct1(waterAvg)}% (${t('whoGuideline')}: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L ${t('forAges')} ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
                     </div>
                     <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
                         <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
@@ -1544,7 +1544,7 @@
                     </div>
                     <div class="kpi-card border-orange">
                         <div class="kpi-icon" style="background:rgba(245,158,11,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l4 10H4L8 2z"/><path d="M12 12v6"/><path d="M8 22h8"/><path d="M12 18h0"/><circle cx="12" cy="18" r="2"/></svg></div>
-                        <div class="kpi-label">Daily Hydration</div><div class="kpi-value accent-orange">${bottleTotal + active.length}</div><div class="kpi-sublabel">${active.length} bottles carried + ${bottleTotal} refills at school</div>
+                        <div class="kpi-label">${t('dailyHydration')}</div><div class="kpi-value accent-orange">${bottleTotal + active.length}</div><div class="kpi-sublabel">${active.length} ${t('bottles')} + ${bottleTotal} ${t('refills')}</div>
                     </div>
                 </div>
             `;
@@ -1677,10 +1677,10 @@
                 html += `
                     <div class="daily-grid">
                         <div><div class="snap-day">${d.day}</div><div style="font-size:0.6rem; color:#b0bec5; font-weight:500;">${dayDate}</div><div class="snap-time">${d.arrival_time}</div></div>
-                        <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% completed</div></div>
-                        <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% completed</div></div>
+                        <div><div class="snap-value">${d.snacks}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${sp}%; background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div><div style="font-size:0.62rem; color:#a78bfa; margin-top:3px; font-weight:500;">${sp}% ${t('completed')}</div></div>
+                        <div><div class="snap-value">${d.lunch}</div><div class="snap-bar"><div class="snap-bar-fill" style="width:${lp}%; background:linear-gradient(90deg,#059669,#34d399)"></div></div><div style="font-size:0.62rem; color:#34d399; margin-top:3px; font-weight:500;">${lp}% ${t('completed')}</div></div>
                         <div><div class="snap-value">${d.interested_in}</div><div style="font-size:0.62rem; color:#60a5fa; margin-top:5px; font-weight:500;">Water: ${wp}%</div></div>
-                        <div style="text-align:center;"><div style="font-size:1rem; font-weight:700; color:#fbbf24;">${d.bottle_refill}</div><div style="font-size:0.58rem; color:#64748b; font-weight:500;">bottles</div></div>
+                        <div style="text-align:center;"><div style="font-size:1rem; font-weight:700; color:#fbbf24;">${d.bottle_refill}</div><div style="font-size:0.58rem; color:#64748b; font-weight:500;">${t('bottles')}</div></div>
                         <div style="text-align:center;">${uniformBadge}</div>
                     </div>`;
             });
