@@ -1532,15 +1532,15 @@
                 <div class="kpi-grid">
                     <div class="kpi-card border-purple">
                         <div class="kpi-icon" style="background:rgba(139,92,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-                        <div class="kpi-label">${t('morningSnack')}<span class="help-tip" data-tip="${t('snackTip')}">?</span></div><div class="kpi-value accent-purple">${pct1(snackAvg)}%</div>${miniBar(snackAvg, '#a78bfa')}${deltaHtml(snackDelta)}<div class="kpi-sublabel">${t('snackRate')}: ${pct1(snackAvg)}% ${t('thisWeek')} ${getStatusText(snackAvg)}${sparkline(snackSpark, '#a78bfa')}</div>
+                        <div class="kpi-label">${t('morningSnack')}<span class="help-tip" data-tip="${t('snackTip')}">?</span></div><div class="kpi-value accent-purple">${pct1(snackAvg)}%</div>${miniBar(snackAvg, '#a78bfa')}${isParentView ? '' : deltaHtml(snackDelta)}<div class="kpi-sublabel">${t('snackRate')}: ${pct1(snackAvg)}% ${t('thisWeek')} ${getStatusText(snackAvg)}${isParentView ? '' : sparkline(snackSpark, '#a78bfa')}</div>
                     </div>
                     <div class="kpi-card border-green">
                         <div class="kpi-icon" style="background:rgba(16,185,129,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 22V7"/></svg></div>
-                        <div class="kpi-label">${t('afternoonMeal')}<span class="help-tip" data-tip="${t('mealTip')}">?</span></div><div class="kpi-value accent-green">${pct1(lunchAvg)}%</div>${miniBar(lunchAvg, '#34d399')}${deltaHtml(lunchDelta)}<div class="kpi-sublabel">${t('mealRate')}: ${pct1(lunchAvg)}% ${t('thisWeek')} ${getStatusText(lunchAvg)}${sparkline(lunchSpark, '#34d399')}</div>
+                        <div class="kpi-label">${t('afternoonMeal')}<span class="help-tip" data-tip="${t('mealTip')}">?</span></div><div class="kpi-value accent-green">${pct1(lunchAvg)}%</div>${miniBar(lunchAvg, '#34d399')}${isParentView ? '' : deltaHtml(lunchDelta)}<div class="kpi-sublabel">${t('mealRate')}: ${pct1(lunchAvg)}% ${t('thisWeek')} ${getStatusText(lunchAvg)}${isParentView ? '' : sparkline(lunchSpark, '#34d399')}</div>
                     </div>
                     <div class="kpi-card border-blue">
                         <div class="kpi-icon" style="background:rgba(59,130,246,0.1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
-                        <div class="kpi-label">${t('hydrationLevel')}<span class="help-tip" data-tip="${t('waterTip')}">?</span></div><div class="kpi-value accent-blue">${pct1(waterAvg)}%</div>${miniBar(waterAvg, '#60a5fa')}${deltaHtml(waterDelta)}<div class="kpi-sublabel">${t('waterRate')}: ${pct1(waterAvg)}% (${t('whoGuideline')}: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L ${t('forAges')} ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})${sparkline(waterSpark, '#60a5fa')}</div>
+                        <div class="kpi-label">${t('hydrationLevel')}<span class="help-tip" data-tip="${t('waterTip')}">?</span></div><div class="kpi-value accent-blue">${pct1(waterAvg)}%</div>${miniBar(waterAvg, '#60a5fa')}${isParentView ? '' : deltaHtml(waterDelta)}<div class="kpi-sublabel">${t('waterRate')}: ${pct1(waterAvg)}%${isParentView ? '' : ` (${t('whoGuideline')}: ~${WHO_WATER_STANDARDS[CURRENT_CLASS].schoolLitres}L ${t('forAges')} ${WHO_WATER_STANDARDS[CURRENT_CLASS].ageRange})`}${isParentView ? '' : sparkline(waterSpark, '#60a5fa')}</div>
                     </div>
                     <div class="kpi-card" style="border-top:3px solid ${gaugeColor};">
                         <div class="radial-gauge" style="width:80px;height:80px;margin:0 auto 8px;">
@@ -1548,7 +1548,7 @@
                             <div class="radial-gauge-value" style="color:${gaugeColor};font-size:1.2rem;">${gaugeScore}%</div>
                         </div>
                         <div class="kpi-label">${t('overallScore')}</div>
-                        <div class="kpi-sublabel">${gaugeScore >= 90 ? 'Excellent' : gaugeScore >= 75 ? 'Good' : gaugeScore >= 60 ? 'Moderate' : 'Needs Attention'}</div>
+                        <div class="kpi-sublabel">${gaugeScore >= 90 ? t('excellent') : gaugeScore >= 75 ? t('good') : gaugeScore >= 60 ? 'Moderate' : t('needsAttentionShort')}</div>
                     </div>
                 </div>
 
@@ -1726,7 +1726,8 @@
             });
             html += `</div>`;
 
-            // AI Insights - Anomaly Detection
+            // AI Insights - Anomaly Detection (admin only - too technical for parents)
+            if (!isParentView) {
             const anomalies = AIEngine.detectAnomalies(selectedStudent, selectedWeekIdx);
             html += `<div class="ai-card">
                 <div class="ai-card-header"><span style="color:#60a5fa;">${icon('search')}</span> ${t('observations')}</div>`;
@@ -1738,6 +1739,7 @@
                 });
             }
             html += `</div>`;
+            } // end anomaly detection admin-only block
 
             // Teacher Recommendations (only in admin/teacher mode)
             if (!isParentView) {
