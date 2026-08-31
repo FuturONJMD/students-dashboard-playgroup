@@ -471,7 +471,7 @@
         .footer p { color: #475569; font-size: 0.68rem; font-weight: 400; }
         
         /* PDF Download button */
-        .pdf-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; border: none; padding: 0.8rem 1.4rem; border-radius: var(--md-shape-md); font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: var(--md-elevation-3), 0 4px 20px rgba(59,130,246,0.3); z-index: 1000; transition: all var(--md-duration-short) var(--md-motion-standard); font-family: inherit; }
+        .pdf-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; border: none; padding: 0.6rem 1rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: var(--md-elevation-3), 0 4px 20px rgba(59,130,246,0.3); z-index: 1000; transition: all var(--md-duration-short) var(--md-motion-standard); font-family: inherit; }
         .pdf-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: var(--md-elevation-4), 0 8px 28px rgba(59,130,246,0.4); }
         .pdf-btn svg { flex-shrink: 0; }
 
@@ -795,14 +795,14 @@
         body.theme-light .accent-orange { color: #d97706; }
         
         /* Theme toggle button */
-        .theme-toggle { position: fixed; top: 1.2rem; right: 5rem; z-index: 1001; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-card); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--md-duration-short) var(--md-motion-standard); box-shadow: var(--md-elevation-2); }
+        .theme-toggle { position: fixed; bottom: 1.5rem; right: 5.5rem; z-index: 1001; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-card); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--md-duration-short) var(--md-motion-standard); box-shadow: var(--md-elevation-2); }
         /* Language Picker */
-        .lang-picker { position: fixed; top: 1.2rem; right: 8.5rem; z-index: 1001; display: flex; gap: 2px; background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(30,41,59,0.75)); backdrop-filter: blur(16px); border: 1px solid rgba(100,116,139,0.25); border-radius: 24px; padding: 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.06); }
+        .lang-picker { position: fixed; bottom: 1.5rem; right: 9rem; z-index: 1001; display: flex; gap: 2px; background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(30,41,59,0.75)); backdrop-filter: blur(16px); border: 1px solid rgba(100,116,139,0.25); border-radius: 24px; padding: 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.06); }
         .lang-btn { padding: 5px 12px; border-radius: 18px; font-size: 0.68rem; font-weight: 600; cursor: pointer; color: #78859b; border: none; background: transparent; font-family: inherit; transition: all var(--md-duration-short) var(--md-motion-standard); }
         .lang-btn.active { background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.15); text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .lang-btn:hover:not(.active) { color: #e2e8f0; background: rgba(51,65,85,0.5); }
         @media print { .lang-picker { display: none !important; } }
-        @media (max-width: 768px) { .lang-picker { top: auto; bottom: 4.5rem; right: 1rem; } }
+        @media (max-width: 768px) { .lang-picker { bottom: 4.5rem; right: 5.5rem; } .theme-toggle { bottom: 4.5rem; right: 1rem; } }
         .theme-toggle:hover { transform: scale(1.1); box-shadow: var(--md-elevation-3), 0 0 16px rgba(59,130,246,0.15); }
         .theme-toggle svg { width: 20px; height: 20px; transition: transform var(--md-duration-medium) var(--md-motion-standard); }
         body.theme-light .theme-toggle svg { transform: rotate(180deg); }
