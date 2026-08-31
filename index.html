@@ -859,8 +859,8 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span id="pdf-btn-text">Download PDF</span>
     </button>
-    <script>var currentLang='en';var I18N={en:{}};function t(k){return(I18N[currentLang]&&I18N[currentLang][k])||k;}function setLanguage(l){currentLang=l;localStorage.setItem('futuron-lang',l);document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l);});if(typeof render==='function'&&typeof studentsData!=='undefined'&&Object.keys(studentsData).length>0)render();}</script>
-    <script src="i18n.js?v=20260827c"></script>
+    <script>var currentLang=localStorage.getItem('futuron-lang')||'en';var I18N={en:{}};function t(k){return(I18N[currentLang]&&I18N[currentLang][k])||I18N.en&&I18N.en[k]||k;}function setLanguage(l){currentLang=l;localStorage.setItem('futuron-lang',l);document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l);});if(typeof render==='function'&&typeof studentsData!=='undefined'&&Object.keys(studentsData).length>0)render();}</script>
+    <script src="i18n.js?v=20260831a"></script>
     <script src="config.js?v=20260730a"></script>
     <script src="sheets-fetcher.js?v=20260730a"></script>
     <script src="ai-engine.js?v=20260730a"></script>
